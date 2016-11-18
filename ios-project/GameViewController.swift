@@ -37,6 +37,10 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     var locations: [(id: String, lat: Double, long: Double)] = []
     
     
+    // SAVES ALL THE DEVICE LOCATIONS
+    var pins: [CustomPointAnnotation?] = []
+    
+    
     let username = "hello"
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     
@@ -109,6 +113,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 
                 
                 
+                /*
                 // ANOTHER PIN
                 if(self.lat2 == 0.0){
                     // set second pin somewhere above and to left of center pin
@@ -129,6 +134,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 
                 // add the "arrow" on the second pin
                 self.UnoDirections(pointA: self.temppin, pointB: self.temppin2);
+                */
                
             }
         }
@@ -157,6 +163,11 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         // empty the array
         self.locations.removeAll()
         
+        // REMOVING ALL THE PINS FROM THE DATABASE FIRST SO WE CAN UPDATE IT
+        for index in pins {
+            self.MapView.removeAnnotation(index!)
+        }
+        
         // loop through each device and retrieve device id, lat and long, store in locations array
         for child in locations.children.allObjects as? [FIRDataSnapshot] ?? [] {
             guard child.key != "(null" else { return }
@@ -164,11 +175,26 @@ class GameViewController: UIViewController, MKMapViewDelegate {
             let childLat = child.childSnapshot(forPath: "lat").value as! Double
             let childLong = child.childSnapshot(forPath: "long").value as! Double
             self.locations += [(id: childId, lat: childLat, long: childLong )]
+            
+            // ADDING OTHER DEVICES FROM DB TO THE MAP AND SAVING THAT LOCATION INTO GLOBAL VAR PINS
+            if childId != deviceId {
+                var tempLocation : CLLocationCoordinate2D
+                let temppin2  = CustomPointAnnotation()
+                tempLocation  = CLLocationCoordinate2D(latitude: childLat, longitude: childLong)
+                temppin2.coordinate = tempLocation
+                temppin2.playerRole = "playerTwo"
+                pins.append(temppin2)
+                // add arrows pointing to all devices
+                
+                self.MapView.addAnnotation(temppin2)
+                self.UnoDirections(pointA: self.temppin, pointB: temppin2);
+            }
         }
         
         print("***** updated locations array ****** \(self.locations)")
         
         // call functions once array of locations is updated
+        
     }
     
     
