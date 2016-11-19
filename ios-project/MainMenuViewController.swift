@@ -89,14 +89,14 @@ class MainMenuViewController: UIViewController {
         
         self.targetGameId = gameId;
         self.db.child("lobbies").child(gameId).setValue(["hostId": deviceId])
-        self.db.child("lobbies").child(gameId).child("players").setValue(["deviceId": deviceId, "ready": false, "role": "hunter"])
+        self.db.child("lobbies").child(gameId).child("players").child(deviceId).setValue(["ready": false, "role": "hunter"])
         
         performSegue(withIdentifier: "LobbySegue", sender: self)
     }
     
     fileprivate func joinRoom(gameId : String) {
         self.targetGameId = gameId;
-        self.db.child("lobbies").child(gameId).child("players").setValue(["deviceId": deviceId, "ready": false, "role": "hunter"])
+        self.db.child("lobbies").child(gameId).child("players").child(deviceId).setValue(["ready": false, "role": "hunter"])
         
         
         performSegue(withIdentifier: "LobbySegue", sender: self)

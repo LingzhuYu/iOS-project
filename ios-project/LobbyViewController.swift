@@ -14,8 +14,9 @@ class LobbyViewController: UIViewController {
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
     
-    public var gameId : String = ""
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
+    public var gameId : String = ""
+    var players = [(deviceId: String, ready: Bool, role: String)]()
     // let lobby : Lobby = Lobby()
     
     override func viewDidLoad() {
@@ -41,6 +42,22 @@ class LobbyViewController: UIViewController {
                 strongSelf.debugShowPlayerJoined(player: snapshot)
             }
         )
+        
+        // retrieve values 
+        var lobby = self.db.child("lobbies").child(gameId)
+        
+    }
+    
+    func onPlayerListUpdated(playerList: FIRDataSnapshot) {
+        
+        // This looks pretty promising 
+        // http://stackoverflow.com/questions/38038990/firebase-converting-snapshot-value-to-objects
+        for child in playerList.children.allObjects as? [FIRDataSnapshot] ?? [] {
+            let childId = child.key
+            let childReady = child.childSnapshot(forPath: "ready").value as! Bool
+            let childRole = child.childSnapshot(forPath: "role").value as! String
+            // do stuff with data
+        }
     }
     
     func debugShowPlayerJoined(player: FIRDataSnapshot) {
@@ -65,4 +82,32 @@ class LobbyViewController: UIViewController {
     }
     */
 
+    deinit {
+        self.db.child("lobbies").child(gameId).removeObserver(withHandle: _refHandle)
+    }
+    
+}
+
+class LobbyPlayerCell: UITableViewCell {
+    
+    var deviceId = ""
+    
+    var name = "" {
+        didSet {
+            playerNameLabel.text = name
+        }
+    }
+    
+    var ready = false {
+        didSet {
+            playerReadySwitch.isOn = ready
+        }
+    }
+    
+    var role = ""
+    
+    @IBOutlet weak var playerNameLabel: UILabel!
+    @IBOutlet weak var playerReadySwitch: UISwitch!
+    
+    
 }
