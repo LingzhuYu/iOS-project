@@ -11,6 +11,7 @@ import Firebase
 
 class MainMenuViewController: UIViewController {
 
+    @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var gameIdTextField: UITextField!
     
     fileprivate var db: FIRDatabaseReference!
@@ -18,6 +19,8 @@ class MainMenuViewController: UIViewController {
     
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     var targetGameId: String = ""
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,17 +90,21 @@ class MainMenuViewController: UIViewController {
          ] as [String : Any] */
         
         
+        let username = usernameTextField.text!
+        
         self.targetGameId = gameId;
         self.db.child("lobbies").child(gameId).setValue(["hostId": deviceId])
-        self.db.child("lobbies").child(gameId).child("players").child(deviceId).setValue(["ready": false, "role": "hunter"])
+        self.db.child("lobbies").child(gameId).child("players").child(deviceId).setValue(["ready": false, "role": "hunter", "username": username])
         
         performSegue(withIdentifier: "LobbySegue", sender: self)
     }
     
     fileprivate func joinRoom(gameId : String) {
-        self.targetGameId = gameId;
-        self.db.child("lobbies").child(gameId).child("players").child(deviceId).setValue(["ready": false, "role": "hunter"])
         
+        let username = usernameTextField.text!
+
+        self.targetGameId = gameId;
+        self.db.child("lobbies").child(gameId).child("players").child(deviceId).setValue(["ready": false, "role": "hunter", "username": username])
         
         performSegue(withIdentifier: "LobbySegue", sender: self)
     }
