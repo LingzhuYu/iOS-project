@@ -26,9 +26,14 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     var locationUpdatedObserver : AnyObject?
     var temppin  = CustomPointAnnotation()
     var temppin2  = CustomPointAnnotation()
+    var invsablePower = HiderInvisibility()
+    var compassPower = SeekerCompass()
+    
+    //center pin
+    var centerPin = CustomPointAnnotation()
     
     var tempLocation : CLLocationCoordinate2D?
-    var map : Map?
+//    var map : Map?
     
     
     var db: FIRDatabaseReference!
@@ -51,8 +56,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     var mapRadius = 0.00486
     var path: MKPolyline = MKPolyline()
 
+
     
-//    var map : Map = Map(topCorner: MKMapPoint(x: 49.247815, y: -123.004096), botCorner: MKMapPoint(x: 49.254675, y: -122.997617), tileSize: 1)
+    var map : Map = Map(topCorner: MKMapPoint(x: 49.247815, y: -123.004096), botCorner: MKMapPoint(x: 49.254675, y: -122.997617), tileSize: 1)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,14 +69,57 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         self.MapView.delegate = self
       
         // Center map on Map coordinates
-        //MapView.setRegion(convertRectToRegion(rect: map.mapActual), animated: true)
+        MapView.setRegion(convertRectToRegion(rect: map.mapActual), animated: true)
         
         //Disable user interaction
         MapView.isZoomEnabled = false;
         MapView.isScrollEnabled = false;
         MapView.isUserInteractionEnabled = false;
         
-     
+        //adding pin onto the center
+        let mapPointCoordinate : CLLocationCoordinate2D = MapView.centerCoordinate
+        centerPin.coordinate = mapPointCoordinate
+        centerPin.playerRole = "centerMap"
+        MapView.addAnnotation(centerPin)
+        
+        
+        //TODO: Currently hardcoded, so it must be put in a loop once database is set up
+        
+        //1st power up
+        //Get x and y coordinates of corners of the map
+        let rx = self.map.bottomRightPoint.x
+        let lx = self.map.topLeftPoint.x
+        let ry = self.map.bottomRightPoint.y
+        let ly = self.map.topLeftPoint.y
+        
+        //Generate random coordinate for the powerup
+        let r  = self.randomIn(lx,rx)
+        let l  = self.randomIn(ly,ry)
+        self.tempLocation  = CLLocationCoordinate2D(latitude: r, longitude: l)
+        
+        //Add the power up to the map
+        self.invsablePower.coordinate = self.tempLocation!
+        self.MapView.addAnnotation(self.invsablePower)
+        
+        
+        
+        //2nd power up
+        //Get x and y coordinates of corners of the map
+        let rx2 = self.map.bottomRightPoint.x
+        let lx2 = self.map.topLeftPoint.x
+        let ry2 = self.map.bottomRightPoint.y
+        let ly2 = self.map.topLeftPoint.y
+        
+        //Generate random coordinate for the powerup
+        let r2  = self.randomIn(lx2,rx2)
+        let l2  = self.randomIn(ly2,ry2)
+        self.tempLocation  = CLLocationCoordinate2D(latitude: r2, longitude: l2)
+        
+        //Add the power up to the map
+        self.compassPower.coordinate = self.tempLocation!
+        self.MapView.addAnnotation(self.compassPower)
+        
+        
         
         locationUpdatedObserver = notificationCentre.addObserver(forName: NSNotification.Name(rawValue: Notifications.LocationUpdated),
                                                                  object: nil,
@@ -104,9 +153,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 self.temppin.coordinate = self.tempLocation!
                 
             
-                self.map = Map(topCorner: MKMapPoint(x: self.lat - self.mapRadius, y: self.long - self.mapRadius), botCorner: MKMapPoint(x: self.lat + self.mapRadius, y: self.long + self.mapRadius), tileSize: 1)
-                
-                self.MapView.setRegion(self.convertRectToRegion(rect: (self.map?.mapActual)!), animated: true)
+//                self.map = Map(topCorner: MKMapPoint(x: self.lat - self.mapRadius, y: self.long - self.mapRadius), botCorner: MKMapPoint(x: self.lat + self.mapRadius, y: self.long + self.mapRadius), tileSize: 1)
+//                
+//                self.MapView.setRegion(self.convertRectToRegion(rect: (self.map?.mapActual)!), animated: true)
                 
                 self.temppin.playerRole = "playerOne"
                 self.MapView.addAnnotation(self.temppin)
@@ -291,17 +340,24 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         else {
             annotationView!.annotation = annotation
         }
-
-        let customAnnotation = annotation as! CustomPointAnnotation
         
-        if customAnnotation.playerRole == "playerOne" {
-            annotationView!.image = self.resizeImage(image: UIImage(named: "team_red")!, targetSize: CGSize(30, 30))
-        } else {
-            annotationView!.image = self.resizeImage(image: UIImage(named: "team_blue")!, targetSize: CGSize(30, 30))
+        
+        if annotation is PowerUp{
+            let customAnnotation = annotation as! PowerUp
+            annotationView!.image = customAnnotation.icon
+            
+        }else if annotation is CustomPointAnnotation{
+            let customAnnotation = annotation as! CustomPointAnnotation
+            
+            if customAnnotation.playerRole == "playerOne" {
+                annotationView!.image = self.resizeImage(image: UIImage(named: "team_red")!, targetSize: CGSize(30, 30))
+            } else if customAnnotation.playerRole == "playerTwo" {
+                annotationView!.image = self.resizeImage(image: UIImage(named: "team_blue")!, targetSize: CGSize(30, 30))
+            } else if customAnnotation.playerRole == "centerMap"{
+                annotationView!.image = self.resizeImage(image: UIImage(named: "Pokeball")!, targetSize: CGSize(30, 30))
+            }
         }
-        
-        
-     
+ 
         return annotationView
         
     }
@@ -350,6 +406,14 @@ class GameViewController: UIViewController, MKMapViewDelegate {
             MKCoordinateSpan(latitudeDelta: rect.size.width, longitudeDelta: rect.size.height)
         )
     }
+    
+    func random() -> Double {
+        return Double(arc4random()) / 0xFFFFFFFF
+    }
+    func randomIn(_ min: Double,_ max: Double) -> Double {
+        return random() * (max - min ) + min
+    }
+    
 
     /*
     // MARK: - Navigation

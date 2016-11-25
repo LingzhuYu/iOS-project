@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import ios_project
 
 class lobbyTest: XCTestCase {
     
@@ -127,4 +128,25 @@ class lobbyTest: XCTestCase {
 
     }
     
+    func test8_JoinLobbyInvalidCode() {
+        let profile = Profile(userName: "UserName", tag: "GamerTag")
+        var lobby: Lobby? = nil
+        do {
+            lobby = try Lobby.lobbyJoinLobby(profile, "")
+        } catch {
+            
+        }
+        XCTAssertNil(lobby)
+    }
+    
+    func test9_JoinLobbyValidCode() {
+        let profile = Profile(userName: "UserName", tag: "GamerTag")
+        var lobby: Lobby? = nil
+        do {
+           lobby = try Lobby.lobbyJoinLobby(profile, "1234")!
+        } catch {
+            
+        }
+        XCTAssertNotNil(lobby)
+    }
 }

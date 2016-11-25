@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import UIKit
+import MapKit
 
 protocol PowerUp{
     
@@ -29,7 +31,10 @@ protocol PowerUp{
     var isActive : Bool { get set }
     
     // brief description of the powerup
-    var description : String { get set }
+    var powerDescription : String { get set }
+    
+    //icon
+    var icon : UIImage {get set}
     
     init()
     
