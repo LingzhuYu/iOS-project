@@ -98,6 +98,7 @@
                     </view>
                     <connections>
                         <outlet property="gameIdTextField" destination="Q3V-iE-QBJ" id="bjX-o7-99N"/>
+                        <outlet property="usernameTextField" destination="RwI-mP-mkF" id="b8G-4y-5q6"/>
                         <segue destination="vfZ-gE-bYJ" kind="show" identifier="LobbySegue" id="9R4-GO-coQ"/>
                     </connections>
                 </viewController>
@@ -152,18 +153,31 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N9U-4f-iAC"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="S" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bkz-al-esI">
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="43" id="obn-6e-ygu"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="31"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="N9U-4f-iAC" firstAttribute="centerY" secondItem="SfZ-hp-mCA" secondAttribute="centerY" id="AvN-Zm-IUX"/>
                                                 <constraint firstItem="Sax-e9-dW0" firstAttribute="leading" secondItem="SfZ-hp-mCA" secondAttribute="leadingMargin" constant="14" id="Pr8-B7-F3C"/>
+                                                <constraint firstItem="Bkz-al-esI" firstAttribute="top" secondItem="SfZ-hp-mCA" secondAttribute="top" id="TN7-Ny-INo"/>
                                                 <constraint firstItem="Sax-e9-dW0" firstAttribute="top" secondItem="SfZ-hp-mCA" secondAttribute="topMargin" constant="3" id="hdJ-2j-l29"/>
+                                                <constraint firstItem="N9U-4f-iAC" firstAttribute="leading" secondItem="Bkz-al-esI" secondAttribute="trailing" constant="22" id="kDb-Hk-kpe"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="N9U-4f-iAC" secondAttribute="trailing" id="n0B-gu-tP6"/>
+                                                <constraint firstAttribute="bottom" secondItem="Bkz-al-esI" secondAttribute="bottom" id="oQv-Jx-BJW"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="playerNameLabel" destination="Sax-e9-dW0" id="vLQ-ZC-aKb"/>
                                             <outlet property="playerReadySwitch" destination="N9U-4f-iAC" id="AWj-Vp-RBF"/>
+                                            <outlet property="playerRoleLabel" destination="Bkz-al-esI" id="gdY-mR-QAk"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -184,10 +198,13 @@
                             <constraint firstItem="ogs-Ho-xE6" firstAttribute="centerX" secondItem="041-B3-Ue3" secondAttribute="centerX" id="vAu-Cx-bxp"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="HrB-vt-OAY" id="xb6-tw-KOv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LCE-Kz-FSJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="994" y="36"/>
+            <point key="canvasLocation" x="992.79999999999995" y="35.532233883058474"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="C0m-UW-ead">

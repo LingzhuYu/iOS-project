@@ -9,25 +9,25 @@
 import UIKit
 import Firebase
 
-class LobbyViewController: UIViewController {
+class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet weak var tableView: UITableView!
 
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
     
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     public var gameId : String = ""
-    var players = [(deviceId: String, ready: Bool, role: String)]()
+    var players = [LobbyUser]()
     // let lobby : Lobby = Lobby()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.tableView.dataSource = self
+        self.tableView.delegate = self 
+        
         configureDatabase()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     fileprivate func configureDatabase() {
@@ -40,11 +40,12 @@ class LobbyViewController: UIViewController {
             with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else { return }
                 strongSelf.debugShowPlayerJoined(player: snapshot)
+                self?.onPlayerListUpdated(playerList: snapshot)
             }
         )
         
         // retrieve values 
-        var lobby = self.db.child("lobbies").child(gameId)
+        // var lobby = self.db.child("lobbies").child(gameId)
         
     }
     
@@ -52,13 +53,30 @@ class LobbyViewController: UIViewController {
         
         // This looks pretty promising 
         // http://stackoverflow.com/questions/38038990/firebase-converting-snapshot-value-to-objects
+        
         for child in playerList.children.allObjects as? [FIRDataSnapshot] ?? [] {
-            let childId = child.key
-            let childReady = child.childSnapshot(forPath: "ready").value as! Bool
-            let childRole = child.childSnapshot(forPath: "role").value as! String
-            // do stuff with data
+
+            let user = LobbyUser.MakeFromFIRObject(data: child)
+            editOrAddPlayerList(user)
+            
         }
+
     }
+    
+    func editOrAddPlayerList(_ user : LobbyUser) {
+        
+        for (index, element) in players.enumerated() {
+            // Update
+            if (user.id == element.id) {
+                players[index] = user
+                return;
+            }
+        }
+        
+        // Or add
+        players.append(user)
+    }
+    
     
     func debugShowPlayerJoined(player: FIRDataSnapshot) {
         
@@ -71,43 +89,65 @@ class LobbyViewController: UIViewController {
         // Preset alert and play SFX
         self.present(alert, animated: true, completion: nil)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     deinit {
         self.db.child("lobbies").child(gameId).removeObserver(withHandle: _refHandle)
+    }
+    
+    
+    
+    // MARK : - TABLE VIEW
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return players.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "lobbyPlayerCell") as! LobbyPlayerCell
+        
+        cell.lobbyUser = players[indexPath.row]
+        
+        return cell
+    }
+}
+
+class LobbyUser {
+    var id : String
+    var username : String
+    var isReady : Bool
+    var role : String
+    
+    init(id: String, username: String, ready: Bool, seeker: String) {
+        self.id = id
+        self.username = username
+        self.isReady = ready
+        self.role = seeker
+    }
+    
+    class func MakeFromFIRObject(data: FIRDataSnapshot) -> LobbyUser {
+        return LobbyUser(
+            id: data.key,
+            username: data.childSnapshot(forPath: "username").value as! String,
+            ready: data.childSnapshot(forPath: "ready").value as! Bool,
+            seeker: data.childSnapshot(forPath: "role").value as! String
+        )
     }
     
 }
 
 class LobbyPlayerCell: UITableViewCell {
     
-    var deviceId = ""
-    
-    var name = "" {
-        didSet {
-            playerNameLabel.text = name
-        }
-    }
-    
-    var ready = false {
-        didSet {
-            playerReadySwitch.isOn = ready
-        }
-    }
-    
-    var role = ""
-    
     @IBOutlet weak var playerNameLabel: UILabel!
     @IBOutlet weak var playerReadySwitch: UISwitch!
+    @IBOutlet weak var playerRoleLabel: UILabel!
     
+    var lobbyUser : LobbyUser? {
+        didSet {
+            playerNameLabel.text = lobbyUser?.username
+            playerReadySwitch.isOn = (lobbyUser?.isReady)!
+            playerRoleLabel.text = (lobbyUser?.role.uppercased() == "SEEKER") ? "S" : "H"
+        }
+    }
     
 }
