@@ -49,6 +49,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    // This is called when the database players table is updated.
     func onPlayerListUpdated(playerList: FIRDataSnapshot) {
         
         // This looks pretty promising 
@@ -60,9 +61,12 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             editOrAddPlayerList(user)
             
         }
+        
+        self.tableView.reloadData()
 
     }
     
+    // This updates the table datasource from the database
     func editOrAddPlayerList(_ user : LobbyUser) {
         
         for (index, element) in players.enumerated() {
