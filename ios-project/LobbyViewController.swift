@@ -13,13 +13,20 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var tableView: UITableView!
 
+    @IBOutlet weak var GameIDLabel: UILabel!
+    
+    @IBOutlet weak var HostSettingsButton: UIButton!
+    
+    
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
     
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     public var gameId : String = ""
+    public var hostId : String = ""
     var players = [LobbyUser]()
     var currentUser : LobbyUser?
+
     // let lobby : Lobby = Lobby()
     
     override func viewDidLoad() {
@@ -45,10 +52,26 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         )
         
+        //username: data.childSnapshot(forPath: "username").value as! String,
+        GameIDLabel.text = "Game ID " + gameId
+        var tmp = self.db.child("lobbies").child(gameId).observe(.value, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf = self else { return }
+            //            strongSelf.locationsSnapshot = snapshot
+            strongSelf.parseDevicesForHost(devices: snapshot)
+        })
         // retrieve values 
         // var lobby = self.db.child("lobbies").child(gameId)
         
     }
+    
+    
+    func parseDevicesForHost(devices: FIRDataSnapshot) {
+        
+        //grabs the host's device ID from the database
+        var hostID = devices.childSnapshot(forPath: "hostId").value as! String
+        
+    }
+
     
     // This is called when the database players table is updated.
     func onPlayerListUpdated(playerList: FIRDataSnapshot) {
