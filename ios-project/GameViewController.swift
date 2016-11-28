@@ -26,9 +26,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     var locationUpdatedObserver : AnyObject?
     var temppin  = CustomPointAnnotation()
     var temppin2  = CustomPointAnnotation()
-    var invsablePower = HiderInvisibility()
-    var compassPower = SeekerCompass()
-    
+    var numberOfPower : Int = 10
     //center pin
     var centerPin = CustomPointAnnotation()
     
@@ -92,16 +90,29 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         let ry = self.map.bottomRightPoint.y
         let ly = self.map.topLeftPoint.y
         
-        //Generate random coordinate for the powerup
-        let r  = self.randomIn(lx,rx)
-        let l  = self.randomIn(ly,ry)
-        self.tempLocation  = CLLocationCoordinate2D(latitude: r, longitude: l)
+        for i in 0 ... numberOfPower{
+            //Generate random coordinate for the powerup
+            let r  = self.randomIn(lx,rx)
+            let l  = self.randomIn(ly,ry)
+            self.tempLocation  = CLLocationCoordinate2D(latitude: r, longitude: l)
+            
+            let diceRoll = Int(arc4random_uniform(2))
+            if(diceRoll == 0){
+                let invsablePower = try! HiderInvisibility(id: i,duration: 30,isActive: true)
+                //Add the power up to the map
+                invsablePower.coordinate = self.tempLocation!
+                self.MapView.addAnnotation(invsablePower)
+
+            
+            }else{
+            
+                let compassPower = try! SeekerCompass(id: i,duration: 30,isActive: true)
+                //Add the power up to the map
+                compassPower.coordinate = self.tempLocation!
+                self.MapView.addAnnotation(compassPower)
+            }
         
-        //Add the power up to the map
-        self.invsablePower.coordinate = self.tempLocation!
-        self.MapView.addAnnotation(self.invsablePower)
-        
-        
+        }
         
         //2nd power up
         //Get x and y coordinates of corners of the map
@@ -114,10 +125,6 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         let r2  = self.randomIn(lx2,rx2)
         let l2  = self.randomIn(ly2,ry2)
         self.tempLocation  = CLLocationCoordinate2D(latitude: r2, longitude: l2)
-        
-        //Add the power up to the map
-        self.compassPower.coordinate = self.tempLocation!
-        self.MapView.addAnnotation(self.compassPower)
         
         
         
