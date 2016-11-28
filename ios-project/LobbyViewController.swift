@@ -68,7 +68,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func parseDevicesForHost(devices: FIRDataSnapshot) {
         
         //grabs the host's device ID from the database
-        var hostID = devices.childSnapshot(forPath: "hostId").value as! String
+        hostId = devices.childSnapshot(forPath: "hostId").value as! String
         
     }
 
