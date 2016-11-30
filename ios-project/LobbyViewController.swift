@@ -187,7 +187,8 @@ class LobbyPlayerCell: UITableViewCell {
     
     @IBOutlet weak var playerNameLabel: UILabel!
     @IBOutlet weak var playerReadySwitch: UISwitch!
-    @IBOutlet weak var playerRoleLabel: UILabel!
+    @IBOutlet weak var playerRoleButton: UIButton!
+    
     
     var lobbyController : LobbyViewController?
     
@@ -195,11 +196,24 @@ class LobbyPlayerCell: UITableViewCell {
         didSet {
             playerNameLabel.text = lobbyUser?.username
             playerReadySwitch.isOn = (lobbyUser?.isReady)!
-            playerRoleLabel.text = (lobbyUser?.role.uppercased() == "SEEKER") ? "S" : "H"
+            let role = (lobbyUser?.role.uppercased() == "SEEKER") ? "S" : "H"
+            playerRoleButton.setTitle(role, for: .normal)
         
             if (lobbyUser?.id != lobbyController?.deviceId) {
                 playerReadySwitch.isEnabled = false
             }
+            let roleColor = (lobbyUser?.role.uppercased() == "SEEKER") ? UIColor.darkGray : UIColor.lightGray
+            playerRoleButton.backgroundColor = roleColor
+        }
+    }
+    
+    @IBAction func playerRoleChange(_ sender: UIButton) {
+        if (playerRoleButton.currentTitle == "S") {
+            playerRoleButton.setTitle("H", for: .normal)
+            playerRoleButton.backgroundColor = UIColor.lightGray
+        } else {
+            playerRoleButton.setTitle("S", for: .normal)
+            playerRoleButton.backgroundColor = UIColor.darkGray
         }
     }
     
