@@ -215,6 +215,7 @@ class LobbyPlayerCell: UITableViewCell {
         if (playerRoleButton.currentTitle == "S") {
             playerRoleButton.setTitle("H", for: .normal)
             playerRoleButton.backgroundColor = UIColor.lightGray
+            
         } else {
             playerRoleButton.setTitle("S", for: .normal)
             playerRoleButton.backgroundColor = UIColor.darkGray

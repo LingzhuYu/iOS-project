@@ -86,6 +86,7 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="RwI-mP-mkF" firstAttribute="top" secondItem="ltZ-Yb-27k" secondAttribute="bottom" constant="10" id="6gB-Ms-wKe"/>
                             <constraint firstItem="ltZ-Yb-27k" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="75" id="9oV-C1-TVt"/>
@@ -107,6 +108,9 @@
                             <constraint firstItem="BwG-nN-Uet" firstAttribute="top" secondItem="u4J-jv-0es" secondAttribute="bottom" constant="8" symbolic="YES" id="tuK-7u-Fjz"/>
                             <constraint firstItem="SGU-ZB-E6u" firstAttribute="centerY" secondItem="Q3V-iE-QBJ" secondAttribute="centerY" id="uDn-vq-S8x"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="EiL-8G-eCR" appends="YES" id="Q65-fa-e0P"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="gameIdTextField" destination="Q3V-iE-QBJ" id="bjX-o7-99N"/>
@@ -115,6 +119,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="EiL-8G-eCR">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="BYZ-38-t0r" id="giY-AA-EyV"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="24.800000000000001" y="36.431784107946029"/>
         </scene>
@@ -175,9 +184,8 @@
                                                         <action selector="onReadyChanged:" destination="Tcf-Va-2og" eventType="valueChanged" id="Kdz-fS-DM0"/>
                                                     </connections>
                                                 </switch>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-aN-SfM">
+                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-aN-SfM">
                                                     <rect key="frame" x="221" y="0.0" width="43" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                                     <state key="normal" title="S">
@@ -190,6 +198,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="N9U-4f-iAC" firstAttribute="centerY" secondItem="SfZ-hp-mCA" secondAttribute="centerY" id="AvN-Zm-IUX"/>
+                                                <constraint firstItem="N9U-4f-iAC" firstAttribute="leading" secondItem="Vbn-aN-SfM" secondAttribute="trailing" constant="22" id="K4j-Ya-gce"/>
                                                 <constraint firstItem="Sax-e9-dW0" firstAttribute="leading" secondItem="SfZ-hp-mCA" secondAttribute="leadingMargin" constant="14" id="Pr8-B7-F3C"/>
                                                 <constraint firstItem="Sax-e9-dW0" firstAttribute="top" secondItem="SfZ-hp-mCA" secondAttribute="topMargin" constant="3" id="hdJ-2j-l29"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="N9U-4f-iAC" secondAttribute="trailing" id="n0B-gu-tP6"/>
