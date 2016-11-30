@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 
+
+
 class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
@@ -189,7 +191,6 @@ class LobbyPlayerCell: UITableViewCell {
     @IBOutlet weak var playerReadySwitch: UISwitch!
     @IBOutlet weak var playerRoleButton: UIButton!
     
-    
     var lobbyController : LobbyViewController?
     
     var lobbyUser : LobbyUser? {
@@ -204,6 +205,9 @@ class LobbyPlayerCell: UITableViewCell {
             }
             let roleColor = (lobbyUser?.role.uppercased() == "SEEKER") ? UIColor.darkGray : UIColor.lightGray
             playerRoleButton.backgroundColor = roleColor
+            if(lobbyController?.deviceId != lobbyController?.hostId) {
+                playerRoleButton.isEnabled = false
+            }
         }
     }
     
