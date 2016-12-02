@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-
+import MapKit
 
 
 class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -19,7 +19,10 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var HostSettingsButton: UIButton!
     
+    @IBOutlet weak var startGameButton: UIButton!
     @IBOutlet weak var durationLabel: UILabel!
+    
+    
     
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
@@ -29,6 +32,10 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     public var hostId : String = ""
     var players = [LobbyUser]()
     var currentUser : LobbyUser?
+    
+    var mapCoordinate1 : CLLocationCoordinate2D?
+    var mapCoordinate2 : CLLocationCoordinate2D?
+    
     var gameDuration: Int = 30
 
     // let lobby : Lobby = Lobby()
@@ -40,9 +47,14 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.delegate = self 
         
         configureDatabase()
+        
+        startGameButton.addTarget(self, action: #selector(startGame), for: .touchUpInside)
+        
 
-        HostSettingsButton.addTarget(self, action: #selector(startMap), for: .touchUpInside)
-        HostSettingsButton.backgroundColor = UIColor.clear
+    }
+    
+    func startGame(){
+        
     }
     
     fileprivate func configureDatabase() {
@@ -69,6 +81,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // retrieve values 
         // var lobby = self.db.child("lobbies").child(gameId)
         
+
     }
     
     
@@ -76,6 +89,13 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         //grabs the host's device ID from the database
         hostId = devices.childSnapshot(forPath: "hostId").value as! String
+        
+        if(hostId == deviceId){
+            HostSettingsButton.addTarget(self, action: #selector(startMap), for: .touchUpInside)
+            HostSettingsButton.backgroundColor = UIColor.clear
+        }else{
+            HostSettingsButton.isHidden = true
+        }
         
     }
 
@@ -144,7 +164,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     deinit {
-        self.db.child("lobbies").child(gameId).removeObserver(withHandle: _refHandle)
+       // self.db.child("lobbies").child(gameId).removeObserver(withHandle: _refHandle)
     }
     
     
@@ -167,12 +187,19 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     //Start of host map settings stuff
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let guest = segue.destination as! LobbyMapSelectView
+        if (segue.identifier == "mapSegue") {
+            let guest = segue.destination as! LobbyMapSelectView
+            guest.lobby = self
+        } else if (segue.identifier == "gameSegue") {
+            // go to game
+        }
     }
     
     func startMap(){
         performSegue(withIdentifier: "mapSegue" , sender: nil)
     }
+    
+
     
     //End of host map settings stuff
     

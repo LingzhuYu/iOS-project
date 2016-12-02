@@ -22,6 +22,7 @@ class LobbyMapSelectView: UIViewController, MKMapViewDelegate, UIGestureRecogniz
     var annotationA = MKPointAnnotation()
     var annotationB = MKPointAnnotation()
     var polygon = MKPolygon()
+    var lobby = LobbyViewController()
     
     var count = 0
     
@@ -36,6 +37,18 @@ class LobbyMapSelectView: UIViewController, MKMapViewDelegate, UIGestureRecogniz
         
         ResetButton.addTarget(self, action: #selector(resetPins), for: .touchUpInside)
         ResetButton.backgroundColor = UIColor.clear
+        
+        
+        //centering current location?
+        let locationManager = CLLocationManager()
+        let locValue:CLLocationCoordinate2D = locationManager.location!.coordinate
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        let span = MKCoordinateSpanMake(0.075, 0.075)
+        let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: locValue.latitude, longitude: locValue.longitude), span: span)
+        mapView.setRegion(region, animated: true)
+        
+        DoneButton.addTarget(self, action: #selector(finishView), for: .touchUpInside)
+        DoneButton.backgroundColor = UIColor.clear
     }
     
     func handleTap(gestureRecognizer: UILongPressGestureRecognizer){
@@ -61,8 +74,8 @@ class LobbyMapSelectView: UIViewController, MKMapViewDelegate, UIGestureRecogniz
         var p4 = MKMapPoint(x: p2.x, y: p1.y)
         var points = [MKMapPoint]()
         points.append(p1)
-        points.append(p2)
         points.append(p3)
+        points.append(p2)
         points.append(p4)
         
         polygon = MKPolygon(points: points, count: points.count)
@@ -84,4 +97,20 @@ class LobbyMapSelectView: UIViewController, MKMapViewDelegate, UIGestureRecogniz
         mapView.removeAnnotation(annotationB)
         self.mapView.remove(polygon)
     }
+    
+    func finishView(){
+        self.lobby.mapCoordinate1 = annotationA.coordinate
+        self.lobby.mapCoordinate2 = annotationB.coordinate
+        self.dismiss(animated: true, completion: nil)
+    }
+    /*
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "doneSegue") {
+            let guest = segue.destination as! LobbyViewController
+            guest.mapCoordinate1 = annotationA.coordinate
+            guest.mapCoordinate2 = annotationB.coordinate
+        }
+    }*/
+
 }
+
