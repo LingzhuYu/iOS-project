@@ -69,7 +69,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         
         configureDatabase()
         
-        var map : Map = Map(topCorner: MKMapPoint(x: (mapPoint1?.latitude)!, y: (mapPoint1?.latitude)!), botCorner: MKMapPoint(x: (mapPoint1?.latitude)!, y: (mapPoint1?.latitude)!), tileSize: 1)
+        var map : Map = Map(topCorner: MKMapPoint(x: (mapPoint1?.latitude)!, y: (mapPoint1?.longitude)!), botCorner: MKMapPoint(x: (mapPoint2?.latitude)!, y: (mapPoint2?.longitude)!), tileSize: 1)
         
         self.MapView.delegate = self
       
