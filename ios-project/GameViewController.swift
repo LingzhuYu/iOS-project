@@ -21,6 +21,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var MapView: MKMapView!
     
+    
     let notificationCentre = NotificationCenter.default
     let locationManager = CLLocationManager()
     var locationUpdatedObserver : AnyObject?
@@ -256,7 +257,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
             if(child.childSnapshot(forPath: "role").value as? String != nil){
                 playerRole = child.childSnapshot(forPath: "role").value as! String
             } else {
-                playerRole = "hinder"
+                playerRole = "hider"
             }
             
             self.locations += [(id: childId, lat: childLat, long: childLong )]

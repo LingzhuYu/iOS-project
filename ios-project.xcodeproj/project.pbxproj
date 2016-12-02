@@ -53,6 +53,8 @@
 		ED6387671DB5844C00FEEFC7 /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6387661DB5844C00FEEFC7 /* Role.swift */; };
 		ED6387681DB5844C00FEEFC7 /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6387661DB5844C00FEEFC7 /* Role.swift */; };
 		ED63876A1DB5851300FEEFC7 /* RoleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6387691DB5851300FEEFC7 /* RoleTest.swift */; };
+		EDE068FF1DF20E1700DEC5BA /* GameStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE068FE1DF20E1700DEC5BA /* GameStartViewController.swift */; };
+		EDE069011DF20F0F00DEC5BA /* Large_icon_no_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = EDE069001DF20F0F00DEC5BA /* Large_icon_no_bg.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +125,8 @@
 		ED63875F1DB583E100FEEFC7 /* Seeker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seeker.swift; sourceTree = "<group>"; };
 		ED6387661DB5844C00FEEFC7 /* Role.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Role.swift; sourceTree = "<group>"; };
 		ED6387691DB5851300FEEFC7 /* RoleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoleTest.swift; sourceTree = "<group>"; };
+		EDE068FE1DF20E1700DEC5BA /* GameStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameStartViewController.swift; sourceTree = "<group>"; };
+		EDE069001DF20F0F00DEC5BA /* Large_icon_no_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Large_icon_no_bg.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +224,7 @@
 				7BEBC6241DDFA566000BE5DD /* MainMenuViewController.swift */,
 				7B615A531DDF95C000F5D376 /* LobbyViewController.swift */,
 				D75C1EE01DF1FAFB00AB8CE8 /* ProfileViewController.swift */,
+				EDE068FE1DF20E1700DEC5BA /* GameStartViewController.swift */,
 			);
 			path = "ios-project";
 			sourceTree = "<group>";
@@ -264,6 +269,7 @@
 		B7641AB71DDFA3D0006B8AE3 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EDE069001DF20F0F00DEC5BA /* Large_icon_no_bg.png */,
 				B7641AB81DDFA3DF006B8AE3 /* aded68ab-da97-42b6-bac9-bd681f17118b.png */,
 			);
 			name = Images;
@@ -398,6 +404,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDE069011DF20F0F00DEC5BA /* Large_icon_no_bg.png in Resources */,
 				B7641AB91DDFA3DF006B8AE3 /* aded68ab-da97-42b6-bac9-bd681f17118b.png in Resources */,
 				7A0A33BE1DB16D3000C2F2D1 /* LaunchScreen.storyboard in Resources */,
 				BC7F2F0B1DDA792B0072F4E9 /* GoogleService-Info.plist in Resources */,
@@ -492,6 +499,7 @@
 				0ACE4A011DB889DB00AA074B /* SeekerCompass.swift in Sources */,
 				7BEBC6251DDFA566000BE5DD /* MainMenuViewController.swift in Sources */,
 				7A0A33B41DB16D3000C2F2D1 /* AppDelegate.swift in Sources */,
+				EDE068FF1DF20E1700DEC5BA /* GameStartViewController.swift in Sources */,
 				ED6387671DB5844C00FEEFC7 /* Role.swift in Sources */,
 				A00A5D0C1DB429AC009E9E16 /* Tile.swift in Sources */,
 				ED6387601DB583E100FEEFC7 /* Seeker.swift in Sources */,
