@@ -122,7 +122,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         updateDatabase(currentUser!)
     }
     
-    func changeRole(_ role: String, userId: String) {
+    func changeRole(_ role: String) {
         //self.db.child("lobbies").child(gameId).child("players").child(userId).setValue(
         //    ["role": role]
         //)
@@ -236,13 +236,15 @@ class LobbyPlayerCell: UITableViewCell {
     @IBAction func playerRoleChange(_ sender: UIButton) {
         if (playerRoleButton.currentTitle == "S") {
             playerRoleButton.setTitle("H", for: .normal)
+            lobbyUser?.role = "hider"
+                lobbyController?.updateDatabase(lobbyUser!)
             playerRoleButton.backgroundColor = UIColor.lightGray
-            //lobbyController?.changeRole("hider", userId: lobbyUser?.id)
             
         } else {
             playerRoleButton.setTitle("S", for: .normal)
+            lobbyUser?.role = "seeker"
+            lobbyController?.updateDatabase(lobbyUser!)
             playerRoleButton.backgroundColor = UIColor.darkGray
-            //lobbyController?.changeRole("seeker", userId: lobbyUser?.id)
         }
     }
     
