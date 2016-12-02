@@ -264,6 +264,8 @@
                         <outlet property="GameIDLabel" destination="Yxp-rR-hHR" id="48g-c3-zWd"/>
                         <outlet property="HostSettingsButton" destination="ge8-69-zjg" id="FD8-Xc-qPx"/>
                         <outlet property="durationLabel" destination="gO5-e2-Icf" id="hZ5-39-pCn"/>
+                        <outlet property="minusButton" destination="m12-3v-fVL" id="GqJ-t7-oiQ"/>
+                        <outlet property="plusButton" destination="8Tu-3C-hDe" id="Y5v-tq-yZN"/>
                         <outlet property="tableView" destination="HrB-vt-OAY" id="xb6-tw-KOv"/>
                         <segue destination="KxX-Rm-C2x" kind="show" identifier="mapSegue" id="c2n-Pi-jvo"/>
                     </connections>

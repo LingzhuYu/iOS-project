@@ -19,10 +19,11 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var HostSettingsButton: UIButton!
     
-    @IBOutlet weak var startGameButton: UIButton!
     @IBOutlet weak var durationLabel: UILabel!
     
+    @IBOutlet weak var minusButton: UIButton!
     
+    @IBOutlet weak var plusButton: UIButton!
     
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
@@ -47,9 +48,6 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.delegate = self 
         
         configureDatabase()
-        
-        startGameButton.addTarget(self, action: #selector(startGame), for: .touchUpInside)
-        
 
     }
     
@@ -95,6 +93,8 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             HostSettingsButton.backgroundColor = UIColor.clear
         }else{
             HostSettingsButton.isHidden = true
+            minusButton.isHidden = true
+            plusButton.isHidden = true
         }
         
     }
