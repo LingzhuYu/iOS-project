@@ -218,7 +218,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     // remove the pin(power up), when it is used or collected by a player, from the map
     func activePowerUp(id: Int) {
         let thePowerUp = try! HiderInvisibility(id: id, duration: 30, isActive: false)
-        self.MapView.removeAnnotation(powerUp[id])
+        self.MapView.removeAnnotation(powerUp[id] as! MKAnnotation)
     }
 
     
