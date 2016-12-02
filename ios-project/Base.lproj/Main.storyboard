@@ -1,5 +1,10 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o8B-Cg-Sss">
+=======
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+>>>>>>> d9d0d56124dca6926bf1c23cee1350f40534f41e
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -426,20 +431,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="PEW-54-Rii">
-                                <rect key="frame" x="16" y="28" width="343" height="631"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="PEW-54-Rii">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="592"/>
                             </mapView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xqh-R5-uD5">
+                                <rect key="frame" x="16" y="600" width="359" height="47"/>
+                                <state key="normal" title="CAPTURE"/>
+                                <connections>
+                                    <action selector="capturePlayer:" destination="o8B-Cg-Sss" eventType="touchUpInside" id="d7O-Ij-Kw0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="PEW-54-Rii" firstAttribute="top" secondItem="2qh-qn-3uE" secondAttribute="top" id="5jj-da-b5O"/>
+                            <constraint firstItem="hgc-r9-buT" firstAttribute="top" secondItem="PEW-54-Rii" secondAttribute="bottom" constant="75" id="McK-xQ-efw"/>
+                            <constraint firstItem="PEW-54-Rii" firstAttribute="leading" secondItem="2qh-qn-3uE" secondAttribute="leading" id="PGk-D7-VGE"/>
+                            <constraint firstAttribute="bottom" secondItem="Xqh-R5-uD5" secondAttribute="bottom" constant="20" symbolic="YES" id="V3d-g3-sIt"/>
+                            <constraint firstAttribute="trailing" secondItem="PEW-54-Rii" secondAttribute="trailing" id="Zut-SE-Y9D"/>
+                            <constraint firstItem="Xqh-R5-uD5" firstAttribute="leading" secondItem="2qh-qn-3uE" secondAttribute="leadingMargin" id="jts-Fq-vhR"/>
+                            <constraint firstItem="Xqh-R5-uD5" firstAttribute="top" secondItem="PEW-54-Rii" secondAttribute="bottom" constant="8" symbolic="YES" id="qqF-7y-9w7"/>
+                            <constraint firstItem="Xqh-R5-uD5" firstAttribute="trailing" secondItem="PEW-54-Rii" secondAttribute="trailing" id="tES-7L-LRw"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="MapView" destination="PEW-54-Rii" id="49f-vw-YhH"/>
+                        <outlet property="captureButton" destination="Xqh-R5-uD5" id="8qS-53-3ba"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dwB-Rd-l0b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="127" y="1570"/>
+            <point key="canvasLocation" x="32.799999999999997" y="732.68365817091455"/>
         </scene>
     </scenes>
     <resources>
