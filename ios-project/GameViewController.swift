@@ -32,6 +32,8 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     var centerPin = CustomPointAnnotation()
     
     var tempLocation : CLLocationCoordinate2D?
+    var mapPoint1 : CLLocationCoordinate2D?
+    var mapPoint2 : CLLocationCoordinate2D?
 //    var map : Map?
     
     
@@ -59,14 +61,16 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     var powerUp = [Int: CLLocationCoordinate2D]()
 
     
-    var map : Map = Map(topCorner: MKMapPoint(x: 49.247815, y: -123.004096), botCorner: MKMapPoint(x: 49.254675, y: -122.997617), tileSize: 1)
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
         configureDatabase()
-
+        
+        var map : Map = Map(topCorner: MKMapPoint(x: (mapPoint1?.latitude)!, y: (mapPoint1?.latitude)!), botCorner: MKMapPoint(x: (mapPoint1?.latitude)!, y: (mapPoint1?.latitude)!), tileSize: 1)
+        
         self.MapView.delegate = self
       
         // Center map on Map coordinates
@@ -88,10 +92,10 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         
         //1st power up
         //Get x and y coordinates of corners of the map
-        let rx = self.map.bottomRightPoint.x
-        let lx = self.map.topLeftPoint.x
-        let ry = self.map.bottomRightPoint.y
-        let ly = self.map.topLeftPoint.y
+        let rx = map.bottomRightPoint.x
+        let lx = map.topLeftPoint.x
+        let ry = map.bottomRightPoint.y
+        let ly = map.topLeftPoint.y
         
         for i in 0 ... numberOfPower{
             //Generate random coordinate for the powerup
@@ -125,10 +129,10 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         
         //2nd power up
         //Get x and y coordinates of corners of the map
-        let rx2 = self.map.bottomRightPoint.x
-        let lx2 = self.map.topLeftPoint.x
-        let ry2 = self.map.bottomRightPoint.y
-        let ly2 = self.map.topLeftPoint.y
+        let rx2 = map.bottomRightPoint.x
+        let lx2 = map.topLeftPoint.x
+        let ry2 = map.bottomRightPoint.y
+        let ly2 = map.topLeftPoint.y
         
         //Generate random coordinate for the powerup
         let r2  = self.randomIn(lx2,rx2)

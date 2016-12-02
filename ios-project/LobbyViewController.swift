@@ -190,8 +190,10 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (segue.identifier == "mapSegue") {
             let guest = segue.destination as! LobbyMapSelectView
             guest.lobby = self
-        } else if (segue.identifier == "gameSegue") {
-            // go to game
+        } else if (segue.identifier == "showLoadScreen") {
+            let guest = segue.destination as! GameStartViewController
+            guest.mapPoint1 = self.mapCoordinate1
+            guest.mapPoint2 = self.mapCoordinate2
         }
     }
     
@@ -199,6 +201,10 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         performSegue(withIdentifier: "mapSegue" , sender: nil)
     }
     
+    
+    @IBAction func startGameListener(_ sender: Any) {
+        performSegue(withIdentifier: "showLoadScreen" , sender: nil)
+    }
 
     
     //End of host map settings stuff
@@ -275,6 +281,8 @@ class LobbyPlayerCell: UITableViewCell {
             lobbyController?.updateDatabase(lobbyUser!)
         }
     }
+    
+    
     
     @IBAction func onReadyChanged(_ sender: AnyObject) {
         lobbyController?.changeReadyStatus(playerReadySwitch.isOn)

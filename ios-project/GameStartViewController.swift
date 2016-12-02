@@ -7,21 +7,27 @@
 //
 
 import UIKit
+import MapKit
 
 class GameStartViewController: UIViewController {
 
     @IBOutlet weak var logoImage: UIImageView!
     @IBOutlet weak var autoProgBar: UIProgressView!
     @IBOutlet weak var autoProgLabel: UILabel!
-    var secondCount : Int = 60
+    var mapPoint1 : CLLocationCoordinate2D?
+    var mapPoint2 : CLLocationCoordinate2D?
+    var secondCount : Int = 5
     var autoCounter: Int = 0 {
         didSet {
-            let fraction = Float(autoCounter) / 60.0
+            let fraction = Float(autoCounter) / Float(secondCount)
             let animate = autoCounter != 0
             
             self.autoProgBar.setProgress(fraction, animated: animate)
             self.autoProgLabel.text = "Seconds till game starts: \(self.secondCount-self.autoCounter)"
             
+            if autoCounter >= secondCount {
+                startMap()
+            }
         }
     }
 
@@ -50,6 +56,28 @@ class GameStartViewController: UIViewController {
                 }
             }
             print("After the loop now")
+        }
+    }
+    
+    
+    
+    func startMap(){
+        print("start map")
+        print(self.mapPoint1)
+        print(self.mapPoint2)
+        
+        performSegue(withIdentifier: "showGameView" , sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("prepare")
+        print(self.mapPoint1)
+        print(self.mapPoint2)
+        if (segue.identifier == "showGameView") {
+            let guest = segue.destination as! GameViewController
+            guest.mapPoint1 = self.mapPoint1
+            guest.mapPoint2 = self.mapPoint2
+
         }
     }
     

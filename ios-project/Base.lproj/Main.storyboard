@@ -259,7 +259,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Start Game"/>
                                 <connections>
-                                    <segue destination="6Qx-lw-ge9" kind="presentation" identifier="showLoadScreen" id="ToY-2Y-VR3"/>
+                                    <action selector="startGameListener:" destination="vfZ-gE-bYJ" eventType="touchUpInside" id="4As-v4-d7T"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HrB-vt-OAY">
@@ -369,6 +369,7 @@
                         <outlet property="plusButton" destination="8Tu-3C-hDe" id="Y5v-tq-yZN"/>
                         <outlet property="tableView" destination="HrB-vt-OAY" id="xb6-tw-KOv"/>
                         <segue destination="KxX-Rm-C2x" kind="show" identifier="mapSegue" id="c2n-Pi-jvo"/>
+                        <segue destination="6Qx-lw-ge9" kind="show" identifier="showLoadScreen" id="3BA-tT-ffg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LCE-Kz-FSJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -428,11 +429,12 @@
                         <outlet property="autoProgBar" destination="7bf-iT-Eh9" id="OQK-zM-35q"/>
                         <outlet property="autoProgLabel" destination="Z1U-5x-cal" id="vx6-X4-slc"/>
                         <outlet property="logoImage" destination="5UV-BT-ZEt" id="WwO-9Q-6kY"/>
+                        <segue destination="o8B-Cg-Sss" kind="show" identifier="showGameView" id="98k-b1-0VD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hz6-av-xMx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1784.8" y="38.23088455772114"/>
+            <point key="canvasLocation" x="993" y="856"/>
         </scene>
         <!--LobbyMapSelect View Controller-->
         <scene sceneID="tc9-0X-cms">
@@ -446,24 +448,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Dhi-nW-din">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Dhi-nW-din">
                                 <rect key="frame" x="0.0" y="20" width="375" height="587"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="587" id="BLI-2a-5ow"/>
+                                </constraints>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mXr-iJ-spe">
                                 <rect key="frame" x="81" y="617" width="77" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Reset"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uzx-o4-FSl">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uzx-o4-FSl">
                                 <rect key="frame" x="237" y="617" width="71" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Done"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Dhi-nW-din" firstAttribute="leading" secondItem="rHs-lu-gN7" secondAttribute="leading" id="f1T-9k-rtD"/>
-                            <constraint firstAttribute="trailing" secondItem="Dhi-nW-din" secondAttribute="trailing" id="uUF-Sk-puP"/>
+                            <constraint firstAttribute="trailing" secondItem="Dhi-nW-din" secondAttribute="trailing" id="Fs1-LZ-MgQ"/>
+                            <constraint firstItem="uzx-o4-FSl" firstAttribute="top" secondItem="Dhi-nW-din" secondAttribute="bottom" constant="10" id="hwp-Y1-CJX"/>
+                            <constraint firstItem="Dhi-nW-din" firstAttribute="top" secondItem="2IF-B7-6LS" secondAttribute="bottom" id="rE9-6X-XiX"/>
+                            <constraint firstItem="Dhi-nW-din" firstAttribute="leading" secondItem="rHs-lu-gN7" secondAttribute="leading" id="tB0-oo-vum"/>
                         </constraints>
                     </view>
                     <connections>
@@ -501,7 +507,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dwB-Rd-l0b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="127" y="1570"/>
+            <point key="canvasLocation" x="25" y="1616"/>
         </scene>
     </scenes>
     <resources>
