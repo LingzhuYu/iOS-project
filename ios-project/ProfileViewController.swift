@@ -28,7 +28,6 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(deviceId)
         configureDatabase()
         
         //TotalPlayedLabel.text = String(describing: gamesPlayed)
@@ -38,7 +37,6 @@ class ProfileViewController: UIViewController {
         db = FIRDatabase.database().reference()
         self.db.child("profile").child(deviceId).observe(.value, with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else { return }
-            //            strongSelf.locationsSnapshot = snapshot
             strongSelf.parseDevicesForHost(devices: snapshot)
         })
     }
