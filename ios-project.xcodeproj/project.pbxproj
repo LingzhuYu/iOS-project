@@ -12,6 +12,7 @@
 		0ACE49FF1DB8858200AA074B /* HiderInvisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACE49FE1DB8858200AA074B /* HiderInvisibility.swift */; };
 		0ACE4A011DB889DB00AA074B /* SeekerCompass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACE4A001DB889DB00AA074B /* SeekerCompass.swift */; };
 		0ACE4A031DB88AC300AA074B /* PowerUpTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACE4A021DB88AC300AA074B /* PowerUpTest.swift */; };
+		173F18AE1DF1334A00C9363F /* LobbyMapSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173F18AD1DF1334A00C9363F /* LobbyMapSelectView.swift */; };
 		24A08B571DB5FA1E00B9CBBA /* Hider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08B561DB5FA1E00B9CBBA /* Hider.swift */; };
 		24A08B581DB5FA1E00B9CBBA /* Hider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08B561DB5FA1E00B9CBBA /* Hider.swift */; };
 		659DB09EAA8825D3854534A7 /* Pods_ios_project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 121483E64D7F1A6918FFEDBD /* Pods_ios_project.framework */; };
@@ -78,6 +79,7 @@
 		0ACE4A001DB889DB00AA074B /* SeekerCompass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeekerCompass.swift; sourceTree = "<group>"; };
 		0ACE4A021DB88AC300AA074B /* PowerUpTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpTest.swift; sourceTree = "<group>"; };
 		121483E64D7F1A6918FFEDBD /* Pods_ios_project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		173F18AD1DF1334A00C9363F /* LobbyMapSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyMapSelectView.swift; sourceTree = "<group>"; };
 		24A08B561DB5FA1E00B9CBBA /* Hider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hider.swift; sourceTree = "<group>"; };
 		6CE61E75AC5B3617CE55F2AC /* Pods-ios-project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios-project.release.xcconfig"; path = "Pods/Target Support Files/Pods-ios-project/Pods-ios-project.release.xcconfig"; sourceTree = "<group>"; };
 		7A0A33B01DB16D3000C2F2D1 /* ios-project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios-project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -217,6 +219,7 @@
 				7BC0B7D91DC7EED1003B084E /* Menu.swift */,
 				7BEBC6241DDFA566000BE5DD /* MainMenuViewController.swift */,
 				7B615A531DDF95C000F5D376 /* LobbyViewController.swift */,
+				173F18AD1DF1334A00C9363F /* LobbyMapSelectView.swift */,
 			);
 			path = "ios-project";
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				7A8704701DB17D4A009C6A6A /* Skill.swift in Sources */,
 				0ACE49FF1DB8858200AA074B /* HiderInvisibility.swift in Sources */,
 				7A0A33B61DB16D3000C2F2D1 /* ViewController.swift in Sources */,
+				173F18AE1DF1334A00C9363F /* LobbyMapSelectView.swift in Sources */,
 				BCE4DF001DC7EC92001E2F34 /* LevelUp.swift in Sources */,
 				B4FCF5741DDEFB0600EE2D65 /* CustomPointAnnotation.swift in Sources */,
 				7BC0B7DA1DC7EED1003B084E /* Menu.swift in Sources */,

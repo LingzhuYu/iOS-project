@@ -38,6 +38,9 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.delegate = self 
         
         configureDatabase()
+
+        HostSettingsButton.addTarget(self, action: #selector(startMap), for: .touchUpInside)
+        HostSettingsButton.backgroundColor = UIColor.clear
     }
     
     fileprivate func configureDatabase() {
@@ -167,6 +170,17 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         return cell
     }
+
+    //Start of host map settings stuff
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let guest = segue.destination as! LobbyMapSelectView
+    }
+    
+    func startMap(){
+        performSegue(withIdentifier: "mapSegue" , sender: nil)
+    }
+    
+    //End of host map settings stuff
 }
 
 class LobbyUser {
