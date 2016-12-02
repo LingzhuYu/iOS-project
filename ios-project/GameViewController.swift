@@ -143,7 +143,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         
         // assign the player to a role, should get this value from lobby somehow
         
-        self.myPin.playerRole = "hider"
+        self.myPin.playerRole = "seeker"
         self.myPin.playerId   = self.deviceId
         
         locationUpdatedObserver = notificationCentre.addObserver(forName: NSNotification.Name(rawValue: Notifications.LocationUpdated),
@@ -272,9 +272,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 if(smallestDistance > distance){
                     smallestDistance = distance
                     
-                    // if self is "hunter" and smallest pin is "hider"
-                    // change hider to hunter
-                    if(self.myPin.playerRole == "hunter" && pin?.playerRole == "hider"){
+                    // if self is "seeker" and smallest pin is "hider"
+                    // change hider to seeker
+                    if(self.myPin.playerRole == "seeker" && pin?.playerRole == "hider"){
                         if(smallestDistance < 10){
                             captureButton.isHidden = false
                             capturable = true
@@ -306,7 +306,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 if(pin?.playerId == playerIdToCatch){
                     // POSTING TO DB
                     self.db.child("locations").child((pin?.playerId)!).setValue([
-                        "lat": lat, "long": long, "role": "hunter"])
+                        "lat": lat, "long": long, "role": "seeker"])
                 }
             }
         }
@@ -378,9 +378,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         }else if annotation is CustomPointAnnotation{
             let customAnnotation = annotation as! CustomPointAnnotation
             
-            if customAnnotation.playerRole == "hunter" {
+            if customAnnotation.playerRole == "hider" {
                 annotationView!.image = self.resizeImage(image: UIImage(named: "team_red")!, targetSize: CGSize(30, 30))
-            } else if customAnnotation.playerRole == "hider" {
+            } else if customAnnotation.playerRole == "seeker" {
                 annotationView!.image = self.resizeImage(image: UIImage(named: "team_blue")!, targetSize: CGSize(30, 30))
             } else if customAnnotation.playerRole == "centerMap"{
                 annotationView!.image = self.resizeImage(image: UIImage(named: "Pokeball")!, targetSize: CGSize(30, 30))
