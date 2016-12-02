@@ -24,10 +24,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     let notificationCentre = NotificationCenter.default
     let locationManager = CLLocationManager()
     var locationUpdatedObserver : AnyObject?
-     var invsablePower = HiderInvisibility()
     var temppin  = CustomPointAnnotation()
     var temppin2  = CustomPointAnnotation()
-    
+    var numberOfPower : Int = 10
     //center pin
     var centerPin = CustomPointAnnotation()
     
@@ -54,7 +53,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     var long2 = 0.0
     var mapRadius = 0.00486
     var path: MKPolyline = MKPolyline()
-
+    
+    // stores power-ups on the map
+    var powerUp = [Int: PowerUp]()
 
     
     var map : Map = Map(topCorner: MKMapPoint(x: 49.247815, y: -123.004096), botCorner: MKMapPoint(x: 49.254675, y: -122.997617), tileSize: 1)
@@ -82,16 +83,59 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         MapView.addAnnotation(centerPin)
         
         
+        //TODO: Currently hardcoded, so it must be put in a loop once database is set up
+        
+        //1st power up
+        //Get x and y coordinates of corners of the map
         let rx = self.map.bottomRightPoint.x
         let lx = self.map.topLeftPoint.x
         let ry = self.map.bottomRightPoint.y
         let ly = self.map.topLeftPoint.y
-        let r  = self.randomIn(lx,rx)
-        let l  = self.randomIn(ly,ry)
-        self.tempLocation  = CLLocationCoordinate2D(latitude: r, longitude: l)
-        // add the power up
-        self.invsablePower.coordinate = self.tempLocation!
-        self.MapView.addAnnotation(self.invsablePower)
+        
+        for i in 1 ... numberOfPower{
+            //Generate random coordinate for the powerup
+            let r  = self.randomIn(lx,rx)
+            let l  = self.randomIn(ly,ry)
+            self.tempLocation  = CLLocationCoordinate2D(latitude: r, longitude: l)
+            
+            let diceRoll = Int(arc4random_uniform(2))
+            if(diceRoll == 0){
+                let invsablePower = try! HiderInvisibility(id: i,duration: 30,isActive: true)
+                //Add the power up to the map
+                invsablePower.coordinate = self.tempLocation!
+                self.MapView.addAnnotation(invsablePower)
+
+            
+                //store the id and locations of the PowerUps, it is easier to find out which power up on the map is to be used or removed
+                powerUp[i] = invsablePower
+                
+            }else{
+            
+                let compassPower = try! SeekerCompass(id: i,duration: 30,isActive: true)
+                //Add the power up to the map
+                compassPower.coordinate = self.tempLocation!
+                self.MapView.addAnnotation(compassPower)
+                
+                //store the id and locations of the PowerUps, it is easier to find out which power up on the map is to be used or removed
+                powerUp[i] = compassPower
+            }
+        
+        }
+        
+        //2nd power up
+        //Get x and y coordinates of corners of the map
+        let rx2 = self.map.bottomRightPoint.x
+        let lx2 = self.map.topLeftPoint.x
+        let ry2 = self.map.bottomRightPoint.y
+        let ly2 = self.map.topLeftPoint.y
+        
+        //Generate random coordinate for the powerup
+        let r2  = self.randomIn(lx2,rx2)
+        let l2  = self.randomIn(ly2,ry2)
+        self.tempLocation  = CLLocationCoordinate2D(latitude: r2, longitude: l2)
+        
+        
+        
         locationUpdatedObserver = notificationCentre.addObserver(forName: NSNotification.Name(rawValue: Notifications.LocationUpdated),
                                                                  object: nil,
                                                                  queue: nil)
@@ -106,12 +150,12 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 self.MapView.removeAnnotation(self.temppin)
                 
                 // SETTING UP ARRAY OF VALUES TO BE POSTED TO DB
-                let mdata : [String: Double] = [
-                    "lat": self.lat, "long": self.long
-                ]
+//                let mdata : [String: Double] = [
+//                    "lat": self.lat, "long": self.long
+//                ]
                 
                 // POSTING TO DB
-                self.db.child("locations").child(self.deviceId).setValue(mdata)
+                //self.db.child("locations").child(self.deviceId).setValue(mdata)
                 
                 // POSTING LAT LONG TO MAP
                 self.tempLocation  = CLLocationCoordinate2D(latitude: self.lat, longitude: self.long)
@@ -124,13 +168,18 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 self.temppin.coordinate = self.tempLocation!
                 
             
-//                self.map = Map(topCorner: MKMapPoint(x: self.lat - self.mapRadius, y: self.long - self.mapRadius), botCorner: MKMapPoint(x: self.lat + self.mapRadius, y: self.long + self.mapRadius), tileSize: 1)
+//               self.map = Map(topCorner: MKMapPoint(x: self.lat - self.mapRadius, y: self.long - self.mapRadius), botCorner: MKMapPoint(x: self.lat + self.mapRadius, y: self.long + self.mapRadius), tileSize: 1)
 //                
-//                self.MapView.setRegion(self.convertRectToRegion(rect: (self.map?.mapActual)!), animated: true)
+//               self.MapView.setRegion(self.convertRectToRegion(rect: (self.map.mapActual)!), animated: true)
+              
+                self.temppin.playerRole = "hunter"
                 
-                self.temppin.playerRole = "playerOne"
+                // POSTING TO DB
+                self.db.child("locations").child(self.deviceId).setValue(
+                    ["lat": self.lat, "long": self.long ,"role": self.temppin.playerRole]
+                )
+
                 self.MapView.addAnnotation(self.temppin)
-                
                 
                 
                 /*
@@ -166,6 +215,13 @@ class GameViewController: UIViewController, MKMapViewDelegate {
 
     }
     
+    // remove the pin(power up), when it is used or collected by a player, from the map
+    func activePowerUp(id: Int) {
+        let thePowerUp = powerUp[id]
+        self.MapView.removeAnnotation(thePowerUp as! MKAnnotation)
+    }
+
+    
     func configureDatabase() {
         //init db
         db = FIRDatabase.database().reference()
@@ -188,33 +244,77 @@ class GameViewController: UIViewController, MKMapViewDelegate {
             self.MapView.removeAnnotation(index!)
         }
         
+        pins.removeAll()
         // loop through each device and retrieve device id, lat and long, store in locations array
         for child in locations.children.allObjects as? [FIRDataSnapshot] ?? [] {
             guard child.key != "(null" else { return }
             let childId = child.key
             let childLat = child.childSnapshot(forPath: "lat").value as! Double
             let childLong = child.childSnapshot(forPath: "long").value as! Double
+            var playerRole = " "
+            
+            if(child.childSnapshot(forPath: "role").value as? String != nil){
+                playerRole = child.childSnapshot(forPath: "role").value as! String
+            } else {
+                playerRole = "hinder"
+            }
+            
             self.locations += [(id: childId, lat: childLat, long: childLong )]
             
             // ADDING OTHER DEVICES FROM DB TO THE MAP AND SAVING THAT LOCATION INTO GLOBAL VAR PINS
             if childId != deviceId {
+                
                 var tempLocation : CLLocationCoordinate2D
                 let temppin2  = CustomPointAnnotation()
                 tempLocation  = CLLocationCoordinate2D(latitude: childLat, longitude: childLong)
+                
                 temppin2.coordinate = tempLocation
-                temppin2.playerRole = "playerTwo"
+                temppin2.playerRole = playerRole
                 pins.append(temppin2)
                 // add arrows pointing to all devices
                 
                 self.MapView.addAnnotation(temppin2)
-                self.UnoDirections(pointA: self.temppin, pointB: temppin2);
+                
             }
         }
+        pointToNearestPin()
         
         print("***** updated locations array ****** \(self.locations)")
         
         // call functions once array of locations is updated
         
+    }
+    
+    func pointToNearestPin(){
+        
+        
+        if(pins.count > 0){
+            // CLLocation of user pin
+            let userLoc = CLLocation(latitude: temppin.coordinate.latitude, longitude: temppin.coordinate.longitude)
+            
+            // pin of current smallest distance
+            let smallestDistancePin = CustomPointAnnotation()
+            var smallestDistance = 10000000.0
+            for pin in pins{
+            
+                // create a CLLocation for each pin
+                let loc = CLLocation(latitude: (pin?.coordinate.latitude)!, longitude: (pin?.coordinate.longitude)!)
+                
+                // get the distance between pins
+                let distance = userLoc.distance(from: loc)
+                
+                if(smallestDistance > distance){
+                    smallestDistance = distance
+                    
+                    // assign pin to smallest distance pin
+                    let tempLocation  = loc.coordinate
+                    smallestDistancePin.coordinate = tempLocation
+                }
+            }
+            
+            // point arrow to smallest distance pin
+            self.UnoDirections(pointA: self.temppin, pointB: smallestDistancePin);
+        }
     }
     
     
@@ -276,6 +376,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
             annotationView!.annotation = annotation
         }
         
+        
         if annotation is PowerUp{
             let customAnnotation = annotation as! PowerUp
             annotationView!.image = customAnnotation.icon
@@ -283,9 +384,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         }else if annotation is CustomPointAnnotation{
             let customAnnotation = annotation as! CustomPointAnnotation
             
-            if customAnnotation.playerRole == "playerOne" {
+            if customAnnotation.playerRole == "hunter" {
                 annotationView!.image = self.resizeImage(image: UIImage(named: "team_red")!, targetSize: CGSize(30, 30))
-            } else if customAnnotation.playerRole == "playerTwo" {
+            } else if customAnnotation.playerRole == "hider" {
                 annotationView!.image = self.resizeImage(image: UIImage(named: "team_blue")!, targetSize: CGSize(30, 30))
             } else if customAnnotation.playerRole == "centerMap"{
                 annotationView!.image = self.resizeImage(image: UIImage(named: "Pokeball")!, targetSize: CGSize(30, 30))
@@ -346,6 +447,14 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     }
     func randomIn(_ min: Double,_ max: Double) -> Double {
         return random() * (max - min ) + min
+    }
+    
+    func changeRole(roles: FIRDataSnapshot){
+        let getRole = roles.childSnapshot(forPath: "role").value as? String
+        
+        if (getRole == "hider"){
+            
+        }
     }
     
 

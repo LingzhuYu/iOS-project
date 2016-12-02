@@ -16,11 +16,10 @@ class HiderInvisibility : MKPointAnnotation, PowerUp {
     static let DEFAULT_ROLE  = "Hider"
     static let DEFAULT_DESC  = "Keeps you hidden from seekers for a period of time"
     
+    var id   : Int
     var name : String
     var role : String
     var duration : Int
-    var expireTime : Int
-    var energyCost : Int
     var isActive : Bool
     var powerDescription : String
     var icon : UIImage
@@ -31,33 +30,31 @@ class HiderInvisibility : MKPointAnnotation, PowerUp {
         self.role        = HiderInvisibility.DEFAULT_ROLE
         self.powerDescription = HiderInvisibility.DEFAULT_DESC
         
+        self.id  = 0
         self.duration    = 60 * 3
-        self.expireTime  = 60 * 3
-        self.energyCost  = 60 * 3
         self.isActive    = false
-        self.icon        = UIImage(named: "invisable")!
+        self.icon        = UIImage(named: "invisible")!
         super.init()
-        self.icon        = self.resizeImage(image: UIImage(named: "invisable")!, targetSize: CGSize(30, 30))
+        self.icon        = self.resizeImage(image: UIImage(named: "invisible")!, targetSize: CGSize(30, 30))
         
     }
     
-    required init(duration: Int, expireTime: Int, energyCost: Int, isActive: Bool) throws{
+    required init(id: Int, duration: Int,  isActive: Bool) throws{
         
         self.name        = HiderInvisibility.DEFAULT_NAME
         self.role        = HiderInvisibility.DEFAULT_ROLE
         self.powerDescription = HiderInvisibility.DEFAULT_DESC
-        self.icon        = UIImage(named: "invisable")!
+        self.icon        = UIImage(named: "invisible")!
+        self.id = id
         
-        if(duration <= 0 || expireTime <= 0 || energyCost <= 0){
+        if(duration <= 0 ){
             throw PowerUpError.illegalArgument
         }else{
             self.duration    = duration
-            self.expireTime  = expireTime
-            self.energyCost  = energyCost
             self.isActive    = isActive
         }
         super.init()
-        self.icon = self.resizeImage(image: UIImage(named: "invisable")!, targetSize: CGSize(30, 30))
+        self.icon = self.resizeImage(image: UIImage(named: "invisible")!, targetSize: CGSize(30, 30))
     }
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
