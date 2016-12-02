@@ -148,6 +148,9 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.db.child("lobbies").child(gameId).child("players").child(user.id).setValue(
             ["username": user.username, "role": user.role, "ready": user.isReady]
         )
+        self.db.child("lobbies").child(gameId).setValue(
+            ["gameStart": false]
+        )
     }
     
     
