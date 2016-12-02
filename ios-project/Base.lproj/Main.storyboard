@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -218,25 +218,52 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Host Settings"/>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30 mins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gO5-e2-Icf">
+                                <rect key="frame" x="156.5" y="568" width="62" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m12-3v-fVL">
+                                <rect key="frame" x="109" y="563" width="30" height="30"/>
+                                <state key="normal" title="-"/>
+                                <connections>
+                                    <action selector="minusDuration:" destination="vfZ-gE-bYJ" eventType="touchUpInside" id="HfH-M7-nAj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Tu-3C-hDe">
+                                <rect key="frame" x="238" y="564" width="30" height="30"/>
+                                <state key="normal" title="+"/>
+                                <connections>
+                                    <action selector="addDuration:" destination="vfZ-gE-bYJ" eventType="touchUpInside" id="3ve-j9-Psn"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="HrB-vt-OAY" firstAttribute="leading" secondItem="041-B3-Ue3" secondAttribute="leadingMargin" id="28t-BI-jok"/>
                             <constraint firstItem="HrB-vt-OAY" firstAttribute="centerX" secondItem="Yxp-rR-hHR" secondAttribute="centerX" id="7aq-O3-mUl"/>
+                            <constraint firstItem="8Tu-3C-hDe" firstAttribute="top" secondItem="HrB-vt-OAY" secondAttribute="bottom" constant="4" id="Bwu-XJ-hwD"/>
                             <constraint firstItem="Rp6-iT-zuc" firstAttribute="centerX" secondItem="041-B3-Ue3" secondAttribute="centerX" id="EiK-00-bg6"/>
                             <constraint firstItem="HrB-vt-OAY" firstAttribute="top" secondItem="Yxp-rR-hHR" secondAttribute="bottom" constant="1" id="EpH-ha-n5d"/>
                             <constraint firstItem="Rp6-iT-zuc" firstAttribute="centerX" secondItem="041-B3-Ue3" secondAttribute="centerX" id="I0o-0Y-Jdf"/>
                             <constraint firstItem="ogs-Ho-xE6" firstAttribute="top" secondItem="BjG-Sa-GV7" secondAttribute="bottom" id="RQ2-0P-DQF"/>
+                            <constraint firstItem="m12-3v-fVL" firstAttribute="top" secondItem="HrB-vt-OAY" secondAttribute="bottom" constant="3" id="Xg6-j1-6ow"/>
                             <constraint firstItem="Yxp-rR-hHR" firstAttribute="top" secondItem="ogs-Ho-xE6" secondAttribute="bottom" constant="40" id="aHt-bn-CGc"/>
+                            <constraint firstItem="gO5-e2-Icf" firstAttribute="centerX" secondItem="041-B3-Ue3" secondAttribute="centerX" id="gv3-eY-per"/>
+                            <constraint firstItem="gO5-e2-Icf" firstAttribute="top" secondItem="HrB-vt-OAY" secondAttribute="bottom" constant="8" id="hr5-z5-yGf"/>
                             <constraint firstItem="Rp6-iT-zuc" firstAttribute="top" secondItem="HrB-vt-OAY" secondAttribute="bottom" constant="37" id="kP9-t2-WgT"/>
+                            <constraint firstItem="8Tu-3C-hDe" firstAttribute="leading" secondItem="gO5-e2-Icf" secondAttribute="trailing" constant="19.5" id="l93-xb-8Lq"/>
                             <constraint firstItem="fPn-aC-ORL" firstAttribute="top" secondItem="Rp6-iT-zuc" secondAttribute="bottom" constant="40" id="nse-ky-WTb"/>
                             <constraint firstItem="Yxp-rR-hHR" firstAttribute="centerX" secondItem="ogs-Ho-xE6" secondAttribute="centerX" id="pQF-Yr-ZGW"/>
                             <constraint firstItem="ogs-Ho-xE6" firstAttribute="centerX" secondItem="041-B3-Ue3" secondAttribute="centerX" id="vAu-Cx-bxp"/>
+                            <constraint firstItem="gO5-e2-Icf" firstAttribute="leading" secondItem="m12-3v-fVL" secondAttribute="trailing" constant="17.5" id="zu4-RT-ZqY"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="GameIDLabel" destination="Yxp-rR-hHR" id="48g-c3-zWd"/>
                         <outlet property="HostSettingsButton" destination="ge8-69-zjg" id="FD8-Xc-qPx"/>
+                        <outlet property="durationLabel" destination="gO5-e2-Icf" id="hZ5-39-pCn"/>
                         <outlet property="tableView" destination="HrB-vt-OAY" id="xb6-tw-KOv"/>
                         <segue destination="KxX-Rm-C2x" kind="show" identifier="mapSegue" id="c2n-Pi-jvo"/>
                     </connections>

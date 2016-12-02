@@ -19,6 +19,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var HostSettingsButton: UIButton!
     
+    @IBOutlet weak var durationLabel: UILabel!
     
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
@@ -28,6 +29,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     public var hostId : String = ""
     var players = [LobbyUser]()
     var currentUser : LobbyUser?
+    var gameDuration: Int = 30
 
     // let lobby : Lobby = Lobby()
     
@@ -122,14 +124,6 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         updateDatabase(currentUser!)
     }
     
-    func changeRole(_ role: String) {
-        //self.db.child("lobbies").child(gameId).child("players").child(userId).setValue(
-        //    ["role": role]
-        //)
-        //TODO: get the new role of the user that role has been switched
-        //      and update the database
-    }
-    
     func updateDatabase(_ user: LobbyUser) {
         self.db.child("lobbies").child(gameId).child("players").child(user.id).setValue(
             ["username": user.username, "role": user.role, "ready": user.isReady]
@@ -181,6 +175,18 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     //End of host map settings stuff
+    
+    @IBAction func minusDuration(_ sender: UIButton) {
+        if(gameDuration > 1) {
+        gameDuration = gameDuration - 1
+        durationLabel.text = String(gameDuration) + " mins"
+        }
+    }
+    
+    @IBAction func addDuration(_ sender: UIButton) {
+        gameDuration = gameDuration + 1
+        durationLabel.text = String(gameDuration) + " mins"
+    }
 }
 
 class LobbyUser {
@@ -235,16 +241,11 @@ class LobbyPlayerCell: UITableViewCell {
     
     @IBAction func playerRoleChange(_ sender: UIButton) {
         if (playerRoleButton.currentTitle == "S") {
-            playerRoleButton.setTitle("H", for: .normal)
             lobbyUser?.role = "hider"
-                lobbyController?.updateDatabase(lobbyUser!)
-            playerRoleButton.backgroundColor = UIColor.lightGray
-            
+            lobbyController?.updateDatabase(lobbyUser!)
         } else {
-            playerRoleButton.setTitle("S", for: .normal)
             lobbyUser?.role = "seeker"
             lobbyController?.updateDatabase(lobbyUser!)
-            playerRoleButton.backgroundColor = UIColor.darkGray
         }
     }
     
