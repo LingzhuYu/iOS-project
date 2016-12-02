@@ -19,6 +19,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     public var gameId : String = ""
     var players = [LobbyUser]()
+    var currentUser : LobbyUser?
     // let lobby : Lobby = Lobby()
     
     override func viewDidLoad() {
@@ -57,9 +58,16 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         for child in playerList.children.allObjects as? [FIRDataSnapshot] ?? [] {
 
+            // Convert to a LobbyUser object to work with
             let user = LobbyUser.MakeFromFIRObject(data: child)
-            editOrAddPlayerList(user)
             
+            // If the user is us, assign to current user for convenience
+            if (user.id == deviceId) {
+                currentUser = user
+            }
+            
+            // Update the table datasource
+            editOrAddPlayerList(user)
         }
         
         self.tableView.reloadData()
@@ -79,6 +87,17 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         // Or add
         players.append(user)
+    }
+    
+    func changeReadyStatus(_ torf: Bool) {
+        currentUser?.isReady = torf
+        updateDatabase(currentUser!)
+    }
+    
+    func updateDatabase(_ user: LobbyUser) {
+        self.db.child("lobbies").child(gameId).child("players").child(user.id).setValue(
+            ["username": user.username, "role": user.role, "ready": user.isReady]
+        )
     }
     
     
@@ -110,6 +129,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "lobbyPlayerCell") as! LobbyPlayerCell
         
+        cell.lobbyController = self
         cell.lobbyUser = players[indexPath.row]
         
         return cell
@@ -146,12 +166,21 @@ class LobbyPlayerCell: UITableViewCell {
     @IBOutlet weak var playerReadySwitch: UISwitch!
     @IBOutlet weak var playerRoleLabel: UILabel!
     
+    var lobbyController : LobbyViewController?
+    
     var lobbyUser : LobbyUser? {
         didSet {
             playerNameLabel.text = lobbyUser?.username
             playerReadySwitch.isOn = (lobbyUser?.isReady)!
             playerRoleLabel.text = (lobbyUser?.role.uppercased() == "SEEKER") ? "S" : "H"
+        
+            if (lobbyUser?.id != lobbyController?.deviceId) {
+                playerReadySwitch.isEnabled = false
+            }
         }
     }
     
+    @IBAction func onReadyChanged(_ sender: AnyObject) {
+        lobbyController?.changeReadyStatus(playerReadySwitch.isOn)
+    }
 }
