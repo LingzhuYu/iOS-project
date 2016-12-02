@@ -126,4 +126,8 @@ class MainMenuViewController: UIViewController {
         }
     }
     
+    @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
 }

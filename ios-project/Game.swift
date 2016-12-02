@@ -22,6 +22,9 @@ public class Game{
     var OutOfBoundsTimer: Timer!
     
     var gameRunning = false
+    let gameBackgroundQueue = DispatchQueue(label: "game.queue",
+                                            qos: .background,
+                                            target: nil)
     
     //for testing
     public var triggerPlayerCount = false
@@ -41,39 +44,56 @@ public class Game{
         self.gameTime = gameTime;
     }
     
+    
     func startGame(){
         gameRunning = true
-        var currentTime = 0
         
-        while (gameRunning){
-            print("time incremented")
-            //TODO: implement function to update game variables
-            
-            // check if game should end
-            let currentPlayerCount = getCurrentPlayersCount() 
-//            let currentHidersCount = getCurrentHidersCount() // roles not implemented, using workaround below
-            let hostCancelled = false // not implemented, need multithreading?
-            let outOfTime = checkOutOfTime(currentTime: (currentTime))
-            
-            // for testing
-            let currentHidersCount = hidersCount
-            
-            triggerGameTime = outOfTime
-            triggerPlayerCount = currentPlayerCount <= 1 ? true : false
-            triggerZeroHiders = currentHidersCount == 0 ? true : false
-            triggerHostCancelled = hostCancelled
-            // end for testing
-            
-            if (currentPlayerCount <= 1 || currentHidersCount == 0 || outOfTime || hostCancelled){
-                gameRunning = false
-            } else {
-                currentTime += 1
-                sleep(1)
-            }
+        gameBackgroundQueue.async {
+            self.gameLoop()
         }
+        
+        
+        //        print("out of game")
         quitGame()
     }
     
+    func gameLoop() {
+        print("time incremented")
+        //TODO: implement function to update game variables
+        
+        // check if game should end
+        let currentPlayerCount = self.getCurrentPlayersCount()
+        //            let currentHidersCount = getCurrentHidersCount() // roles not implemented, using workaround below
+        let hostCancelled = false // not implemented, need multithreading?
+        //                let outOfTime = checkOutOfTime(currentTime: (currentTime))
+        
+        // for testing
+        let currentHidersCount = self.hidersCount
+        
+        //                triggerGameTime = outOfTime
+        self.triggerPlayerCount = currentPlayerCount <= 1 ? true : false
+        self.triggerZeroHiders = currentHidersCount == 0 ? true : false
+        self.triggerHostCancelled = hostCancelled
+        // end for testing
+        
+        //                if (currentPlayerCount <= 1 || currentHidersCount == 0 || outOfTime || hostCancelled){
+        if (currentPlayerCount <= 1 || currentHidersCount == 0 || hostCancelled){
+            //            self.gameRunning = false
+        } else {
+            //                    currentTime += 1
+            sleep(1)
+        }
+        
+        self.loopGuard()
+    }
+    
+    func loopGuard(){
+        print("game running: \(gameRunning)" )
+        if (gameRunning){
+            sleep(3)
+            gameLoop()
+        }
+    }
     func isGameRunning() -> Bool {
         return gameRunning
     }

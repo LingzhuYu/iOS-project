@@ -28,6 +28,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(deviceId)
         configureDatabase()
         
         //TotalPlayedLabel.text = String(describing: gamesPlayed)
@@ -39,7 +40,6 @@ class ProfileViewController: UIViewController {
             guard let strongSelf = self else { return }
             //            strongSelf.locationsSnapshot = snapshot
             strongSelf.parseDevicesForHost(devices: snapshot)
-            print(snapshot)
         })
     }
     
