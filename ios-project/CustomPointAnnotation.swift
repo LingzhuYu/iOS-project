@@ -11,6 +11,9 @@ import UIKit
 import MapKit
 
 class CustomPointAnnotation: MKPointAnnotation {
+    //hider is red and hunter is blue
     var playerRole: String!
+    
+    var playerId: String!
 
 }
