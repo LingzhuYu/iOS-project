@@ -163,7 +163,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         alert.addAction(UIAlertAction(title: "Back", style: .default))
         
         // Preset alert and play SFX
-        self.present(alert, animated: true, completion: nil)
+        //self.present(alert, animated: true, completion: nil)
     }
 
     deinit {
