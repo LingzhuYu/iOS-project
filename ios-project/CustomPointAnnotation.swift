@@ -12,5 +12,7 @@ import MapKit
 
 class CustomPointAnnotation: MKPointAnnotation {
     var playerRole: String!
+    
+    var playerId : String!
 
 }

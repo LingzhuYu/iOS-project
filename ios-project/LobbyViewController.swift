@@ -8,18 +8,37 @@
 
 import UIKit
 import Firebase
+import MapKit
+
 
 class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
 
+    @IBOutlet weak var GameIDLabel: UILabel!
+    
+    @IBOutlet weak var HostSettingsButton: UIButton!
+    
+    @IBOutlet weak var durationLabel: UILabel!
+    
+    @IBOutlet weak var minusButton: UIButton!
+    
+    @IBOutlet weak var plusButton: UIButton!
+    
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
     
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     public var gameId : String = ""
+    public var hostId : String = ""
     var players = [LobbyUser]()
     var currentUser : LobbyUser?
+    
+    var mapCoordinate1 : CLLocationCoordinate2D?
+    var mapCoordinate2 : CLLocationCoordinate2D?
+    
+    var gameDuration: Int = 30
+
     // let lobby : Lobby = Lobby()
     
     override func viewDidLoad() {
@@ -29,6 +48,11 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.delegate = self 
         
         configureDatabase()
+
+    }
+    
+    func startGame(){
+        
     }
     
     fileprivate func configureDatabase() {
@@ -45,10 +69,36 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         )
         
+        //username: data.childSnapshot(forPath: "username").value as! String,
+        GameIDLabel.text = "Game ID " + gameId
+        var tmp = self.db.child("lobbies").child(gameId).observe(.value, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf = self else { return }
+            //            strongSelf.locationsSnapshot = snapshot
+            strongSelf.parseDevicesForHost(devices: snapshot)
+        })
         // retrieve values 
         // var lobby = self.db.child("lobbies").child(gameId)
         
+
     }
+    
+    
+    func parseDevicesForHost(devices: FIRDataSnapshot) {
+        
+        //grabs the host's device ID from the database
+        hostId = devices.childSnapshot(forPath: "hostId").value as! String
+        
+        if(hostId == deviceId){
+            HostSettingsButton.addTarget(self, action: #selector(startMap), for: .touchUpInside)
+            HostSettingsButton.backgroundColor = UIColor.clear
+        }else{
+            HostSettingsButton.isHidden = true
+            minusButton.isHidden = true
+            plusButton.isHidden = true
+        }
+        
+    }
+
     
     // This is called when the database players table is updated.
     func onPlayerListUpdated(playerList: FIRDataSnapshot) {
@@ -98,6 +148,9 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.db.child("lobbies").child(gameId).child("players").child(user.id).setValue(
             ["username": user.username, "role": user.role, "ready": user.isReady]
         )
+        self.db.child("lobbies").child(gameId).setValue(
+            ["gameStart": false]
+        )
     }
     
     
@@ -114,7 +167,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     deinit {
-        self.db.child("lobbies").child(gameId).removeObserver(withHandle: _refHandle)
+       // self.db.child("lobbies").child(gameId).removeObserver(withHandle: _refHandle)
     }
     
     
@@ -133,6 +186,42 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.lobbyUser = players[indexPath.row]
         
         return cell
+    }
+
+    //Start of host map settings stuff
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "mapSegue") {
+            let guest = segue.destination as! LobbyMapSelectView
+            guest.lobby = self
+        } else if (segue.identifier == "showLoadScreen") {
+            let guest = segue.destination as! GameStartViewController
+            guest.mapPoint1 = self.mapCoordinate1
+            guest.mapPoint2 = self.mapCoordinate2
+        }
+    }
+    
+    func startMap(){
+        performSegue(withIdentifier: "mapSegue" , sender: nil)
+    }
+    
+    
+    @IBAction func startGameListener(_ sender: Any) {
+        performSegue(withIdentifier: "showLoadScreen" , sender: nil)
+    }
+
+    
+    //End of host map settings stuff
+    
+    @IBAction func minusDuration(_ sender: UIButton) {
+        if(gameDuration > 1) {
+        gameDuration = gameDuration - 1
+        durationLabel.text = String(gameDuration) + " mins"
+        }
+    }
+    
+    @IBAction func addDuration(_ sender: UIButton) {
+        gameDuration = gameDuration + 1
+        durationLabel.text = String(gameDuration) + " mins"
     }
 }
 
@@ -164,7 +253,7 @@ class LobbyPlayerCell: UITableViewCell {
     
     @IBOutlet weak var playerNameLabel: UILabel!
     @IBOutlet weak var playerReadySwitch: UISwitch!
-    @IBOutlet weak var playerRoleLabel: UILabel!
+    @IBOutlet weak var playerRoleButton: UIButton!
     
     var lobbyController : LobbyViewController?
     
@@ -172,13 +261,31 @@ class LobbyPlayerCell: UITableViewCell {
         didSet {
             playerNameLabel.text = lobbyUser?.username
             playerReadySwitch.isOn = (lobbyUser?.isReady)!
-            playerRoleLabel.text = (lobbyUser?.role.uppercased() == "SEEKER") ? "S" : "H"
+            let role = (lobbyUser?.role.uppercased() == "SEEKER") ? "S" : "H"
+            playerRoleButton.setTitle(role, for: .normal)
         
             if (lobbyUser?.id != lobbyController?.deviceId) {
                 playerReadySwitch.isEnabled = false
             }
+            let roleColor = (lobbyUser?.role.uppercased() == "SEEKER") ? UIColor.darkGray : UIColor.lightGray
+            playerRoleButton.backgroundColor = roleColor
+            if(lobbyController?.deviceId != lobbyController?.hostId) {
+                playerRoleButton.isEnabled = false
+            }
         }
     }
+    
+    @IBAction func playerRoleChange(_ sender: UIButton) {
+        if (playerRoleButton.currentTitle == "S") {
+            lobbyUser?.role = "hider"
+            lobbyController?.updateDatabase(lobbyUser!)
+        } else {
+            lobbyUser?.role = "seeker"
+            lobbyController?.updateDatabase(lobbyUser!)
+        }
+    }
+    
+    
     
     @IBAction func onReadyChanged(_ sender: AnyObject) {
         lobbyController?.changeReadyStatus(playerReadySwitch.isOn)

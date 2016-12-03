@@ -103,6 +103,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        currentLocation = locations.last!
+        Notifications.postLocationUpdated(self, location: currentLocation)
+        /*
         if currentLocation == nil {
             currentLocation = locations.last!
             Notifications.postLocationUpdated(self, location: currentLocation)
@@ -112,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 currentLocation = tmpLocation
                 Notifications.postLocationUpdated(self, location: currentLocation)
             }
-        }
+        }*/
     }
     
 }
