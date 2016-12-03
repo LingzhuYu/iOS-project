@@ -273,15 +273,9 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 if(smallestDistance > distance){
                     smallestDistance = distance
                     
-<<<<<<< HEAD
                     // if self is "hunter" and smallest pin is "hider"
                     // change hider to hunter
                     if(self.myPin.playerRole == "hunter" && pin?.playerRole == "hider"){
-=======
-                    // if self is "seeker" and smallest pin is "hider"
-                    // change hider to seeker
-                    if(self.myPin.playerRole == "seeker" && pin?.playerRole == "hider"){
->>>>>>> c6543376cf2d3e810c9aa63da47fd62427421b1c
                         if(smallestDistance < 10){
                             captureButton.isHidden = false
                             capturable = true
@@ -313,11 +307,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                 if(pin?.playerId == playerIdToCatch){
                     // POSTING TO DB
                     self.db.child("locations").child((pin?.playerId)!).setValue([
-<<<<<<< HEAD
                         "lat": lat, "long": long, "role": "hunter"])
-=======
-                        "lat": lat, "long": long, "role": "seeker"])
->>>>>>> c6543376cf2d3e810c9aa63da47fd62427421b1c
                 }
             }
         }
