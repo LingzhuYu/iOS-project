@@ -95,52 +95,52 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         
         //1st power up
         //Get x and y coordinates of corners of the map
-//        let rx = map.bottomRightPoint.x
-//        let lx = map.topLeftPoint.x
-//        let ry = map.bottomRightPoint.y
-//        let ly = map.topLeftPoint.y
-//        
-//        for i in 0 ... numberOfPower{
-//            //Generate random coordinate for the powerup
-//            let r  = self.randomIn(lx,rx)
-//            let l  = self.randomIn(ly,ry)
-//            self.tempLocation  = CLLocationCoordinate2D(latitude: r, longitude: l)
-//            
-//            let diceRoll = Int(arc4random_uniform(2))
-//            if(diceRoll == 0){
-//                let invsablePower = try! HiderInvisibility(id: i,duration: 30,isActive: true)
-//                //Add the power up to the map
-//                invsablePower.coordinate = self.tempLocation!
-//                self.MapView.addAnnotation(invsablePower)
-//
-//            
-//                //store the id and locations of the PowerUps, it is easier to find out which power up on the map is to be used or removed
-//                powerUp[i] = invsablePower.coordinate
-//                
-//            }else{
-//            
-//                let compassPower = try! SeekerCompass(id: i,duration: 30,isActive: true)
-//                //Add the power up to the map
-//                compassPower.coordinate = self.tempLocation!
-//                self.MapView.addAnnotation(compassPower)
-//                
-//                //store the id and locations of the PowerUps, it is easier to find out which power up on the map is to be used or removed
-//                powerUp[i] = compassPower.coordinate
-//            }
-//        
-//        }
+        let rx = map.bottomRightPoint.x
+        let lx = map.topLeftPoint.x
+        let ry = map.bottomRightPoint.y
+        let ly = map.topLeftPoint.y
         
-//        //2nd power up
-//        //Get x and y coordinates of corners of the map
-//        let rx2 = map.bottomRightPoint.x
-//        let lx2 = map.topLeftPoint.x
-//        let ry2 = map.bottomRightPoint.y
-//        let ly2 = map.topLeftPoint.y
-//        
-//        //Generate random coordinate for the powerup
-//        let r2  = self.randomIn(lx2,rx2)
-//        let l2  = self.randomIn(ly2,ry2)
-//        self.tempLocation  = CLLocationCoordinate2D(latitude: r2, longitude: l2)
+        for i in 0 ... numberOfPower{
+            //Generate random coordinate for the powerup
+            let r  = self.randomIn(lx,rx)
+            let l  = self.randomIn(ly,ry)
+            self.tempLocation  = CLLocationCoordinate2D(latitude: r, longitude: l)
+            
+            let diceRoll = Int(arc4random_uniform(2))
+            if(diceRoll == 0){
+                let invsablePower = try! HiderInvisibility(id: i,duration: 30,isActive: true)
+                //Add the power up to the map
+                invsablePower.coordinate = self.tempLocation!
+                self.MapView.addAnnotation(invsablePower)
+
+            
+                //store the id and locations of the PowerUps, it is easier to find out which power up on the map is to be used or removed
+                powerUp[i] = invsablePower.coordinate
+                
+            }else{
+            
+                let compassPower = try! SeekerCompass(id: i,duration: 30,isActive: true)
+                //Add the power up to the map
+                compassPower.coordinate = self.tempLocation!
+                self.MapView.addAnnotation(compassPower)
+                
+                //store the id and locations of the PowerUps, it is easier to find out which power up on the map is to be used or removed
+                powerUp[i] = compassPower.coordinate
+            }
+        
+        }
+        
+        //2nd power up
+        //Get x and y coordinates of corners of the map
+        let rx2 = map.bottomRightPoint.x
+        let lx2 = map.topLeftPoint.x
+        let ry2 = map.bottomRightPoint.y
+        let ly2 = map.topLeftPoint.y
+        
+        //Generate random coordinate for the powerup
+        let r2  = self.randomIn(lx2,rx2)
+        let l2  = self.randomIn(ly2,ry2)
+        self.tempLocation  = CLLocationCoordinate2D(latitude: r2, longitude: l2)
         
         // assign the player to a role, should get this value from lobby somehow
         
@@ -205,11 +205,11 @@ class GameViewController: UIViewController, MKMapViewDelegate {
 
     }
     
-//    // remove the pin(power up), when it is used or collected by a player, from the map
-//    func activePowerUp(id: Int) {
-//        let thePowerUp = try! HiderInvisibility(id: id, duration: 30, isActive: false)
-//        self.MapView.removeAnnotation(powerUp[id] as! MKAnnotation)
-//    }
+    // remove the pin(power up), when it is used or collected by a player, from the map
+    func activePowerUp(id: Int) {
+        let thePowerUp = try! HiderInvisibility(id: id, duration: 30, isActive: false)
+        self.MapView.removeAnnotation(powerUp[id] as! MKAnnotation)
+    }
 
     
     func configureDatabase() {
