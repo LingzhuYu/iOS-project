@@ -145,6 +145,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         // assign the player to a role, should get this value from lobby somehow
         
         self.myPin.playerRole = "seeker"
+
         self.myPin.playerId   = self.deviceId
         
         
@@ -326,7 +327,6 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                         capturable = true
                         playerIdToCatch = (pin?.playerId)!
                         print(playerIdToCatch)
-                        
                     }else{
                         playerIdToCatch = "unknown"
                         capturable = false
@@ -352,7 +352,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
                     
                     // POSTING TO DB
                     self.db.child("locations").child((pin?.playerId)!).setValue([
-                        "lat": lat, "long": long, "role": "seeker"])
+                        "lat": lat, "long": long, "role": "hunter"])
                 }
             }
         }

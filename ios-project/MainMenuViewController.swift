@@ -93,8 +93,9 @@ class MainMenuViewController: UIViewController {
         let username = usernameTextField.text!
         
         self.targetGameId = gameId;
-        self.db.child("lobbies").child(gameId).setValue(["hostId": deviceId])
+        self.db.child("lobbies").child(gameId).setValue(["hostId": deviceId, "gameStart": false])
         self.db.child("lobbies").child(gameId).child("players").child(deviceId).setValue(["ready": false, "role": "hunter", "username": username])
+        self.db.child("lobbies").child(gameId).child("coords").setValue(["point1": ["lat" : 0, "long" : 0], "point2" : ["lat" : 0, "long" : 0]])
         
         performSegue(withIdentifier: "LobbySegue", sender: self)
     }
