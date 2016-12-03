@@ -14,6 +14,7 @@
 		0ACE4A031DB88AC300AA074B /* PowerUpTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACE4A021DB88AC300AA074B /* PowerUpTest.swift */; };
 		24A08B571DB5FA1E00B9CBBA /* Hider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08B561DB5FA1E00B9CBBA /* Hider.swift */; };
 		24A08B581DB5FA1E00B9CBBA /* Hider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08B561DB5FA1E00B9CBBA /* Hider.swift */; };
+		2E9F36DA1DF22F090039FE41 /* GameEndViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F36D91DF22F090039FE41 /* GameEndViewController.swift */; };
 		7A0A33B41DB16D3000C2F2D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0A33B31DB16D3000C2F2D1 /* AppDelegate.swift */; };
 		7A0A33B61DB16D3000C2F2D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0A33B51DB16D3000C2F2D1 /* ViewController.swift */; };
 		7A0A33B91DB16D3000C2F2D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A33B71DB16D3000C2F2D1 /* Main.storyboard */; };
@@ -80,6 +81,7 @@
 		0ACE4A021DB88AC300AA074B /* PowerUpTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUpTest.swift; sourceTree = "<group>"; };
 		121483E64D7F1A6918FFEDBD /* Pods_ios_project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A08B561DB5FA1E00B9CBBA /* Hider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hider.swift; sourceTree = "<group>"; };
+		2E9F36D91DF22F090039FE41 /* GameEndViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEndViewController.swift; sourceTree = "<group>"; };
 		6CE61E75AC5B3617CE55F2AC /* Pods-ios-project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios-project.release.xcconfig"; path = "Pods/Target Support Files/Pods-ios-project/Pods-ios-project.release.xcconfig"; sourceTree = "<group>"; };
 		7A0A33B01DB16D3000C2F2D1 /* ios-project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios-project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A0A33B31DB16D3000C2F2D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				7BEBC6241DDFA566000BE5DD /* MainMenuViewController.swift */,
 				7B615A531DDF95C000F5D376 /* LobbyViewController.swift */,
 				D75C1EE01DF1FAFB00AB8CE8 /* ProfileViewController.swift */,
+				2E9F36D91DF22F090039FE41 /* GameEndViewController.swift */,
 			);
 			path = "ios-project";
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 				7B615A541DDF95C000F5D376 /* LobbyViewController.swift in Sources */,
 				7A8704701DB17D4A009C6A6A /* Skill.swift in Sources */,
 				0ACE49FF1DB8858200AA074B /* HiderInvisibility.swift in Sources */,
+				2E9F36DA1DF22F090039FE41 /* GameEndViewController.swift in Sources */,
 				7A0A33B61DB16D3000C2F2D1 /* ViewController.swift in Sources */,
 				BCE4DF001DC7EC92001E2F34 /* LevelUp.swift in Sources */,
 				B4FCF5741DDEFB0600EE2D65 /* CustomPointAnnotation.swift in Sources */,
