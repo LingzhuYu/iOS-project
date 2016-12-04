@@ -27,6 +27,7 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     fileprivate var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!   // not observing anything
+    fileprivate var gameStartObserver : FIRDatabaseHandle!
     
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     public var gameId : String = ""
@@ -68,6 +69,17 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self?.onPlayerListUpdated(playerList: snapshot)
             }
         )
+        
+        //add observer for gameStart
+        gameStartObserver = self.db.child("lobbies").child(gameId).child("gameStart").observe(.value, with: { [weak self] (snapshot) -> Void in
+            let value = snapshot.value as! Bool
+            print("________________________________________")
+            print("gameStart changed; game might of been started by host")
+            print("________________________________________")
+            if value {
+                self?.gameStart()
+            }
+        })
         
         //username: data.childSnapshot(forPath: "username").value as! String,
         GameIDLabel.text = "Game ID " + gameId
@@ -148,9 +160,6 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.db.child("lobbies").child(gameId).child("players").child(user.id).setValue(
             ["username": user.username, "role": user.role, "ready": user.isReady]
         )
-        self.db.child("lobbies").child(gameId).setValue(
-            ["gameStart": false]
-        )
     }
     
     
@@ -200,12 +209,44 @@ class LobbyViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    func gameStart() {
+        
+        self.db.child("lobbies").child(gameId).child("coords").observeSingleEvent(of: .value, with: { (snapshot) in
+            let point1 = snapshot.childSnapshot(forPath: "point1").value as? NSDictionary
+            let point2 = snapshot.childSnapshot(forPath: "point2").value as? NSDictionary
+            print("____ \n In gameStart() setting coordinates \n ____")
+            if point1 != nil && point2 != nil {
+                let p1Lat = point1?["lat"] as! Double 
+                let p1Long = point1?["long"] as! Double
+                let p2Lat = point2?["lat"] as! Double
+                let p2Long = point2?["long"] as! Double 
+                // set client coords to what the DB has
+                self.mapCoordinate1 = CLLocationCoordinate2DMake(p1Lat, p1Long)
+                self.mapCoordinate2 = CLLocationCoordinate2DMake(p2Lat, p2Long)
+            }
+ 
+        })
+        performSegue(withIdentifier: "showLoadScreen" , sender: nil)
+    }
+    
     func startMap(){
         performSegue(withIdentifier: "mapSegue" , sender: nil)
     }
     
     
     @IBAction func startGameListener(_ sender: Any) {
+        self.db.child("lobbies").child(gameId).child("coords").updateChildValues([
+            "point1" : [
+                "lat"   : self.mapCoordinate1?.latitude,
+                "long"  : self.mapCoordinate1?.longitude
+            ],
+            "point2" : [
+                "lat"   : self.mapCoordinate2?.latitude,
+                "long"  : self.mapCoordinate2?.longitude
+            ]
+        ])
+        self.db.child("lobbies").child(gameId).updateChildValues(["gameStart" : true])
+        
         performSegue(withIdentifier: "showLoadScreen" , sender: nil)
     }
 
