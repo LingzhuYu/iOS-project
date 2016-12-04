@@ -20,6 +20,8 @@ public class Game{
     
     let notificationCentre = NotificationCenter.default
     
+    var locationsSnapshot: FIRDataSnapshot!
+    
     var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!
     
@@ -38,8 +40,7 @@ public class Game{
         // read locations from db
         _refHandle = self.db.child("locations").observe(.value, with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else {return}
-            
-            strongSelf.parseLocationsSnapshot(locations: snapshot)
+            strongSelf.locationsSnapshot = snapshot
             })
     }
     
@@ -53,7 +54,6 @@ public class Game{
             let childId = child.key
             let childLat = child.childSnapshot(forPath: "lat").value as! Double
             let childLong = child.childSnapshot(forPath: "long").value as! Double
-            
         }
         
     }
@@ -127,9 +127,7 @@ public class Game{
         return true
     }
     
-    func quitGame(){
-        print("running end game functions")
-        
+    func removeSelfFromGameTable(){
         //disable gps and remove own game entry
         print("turning off gps updates")
         Notifications.postGpsToggled(self, toggle: false)
@@ -137,11 +135,21 @@ public class Game{
         
         let deviceId = UIDevice.current.identifierForVendor!.uuidString
         db.child("locations").child(deviceId).removeValue()
+    }
+    
+    func removeLobby() {
+        print(db.child("lobbies"))
+    }
+    
+    func showGameEndView(){
         
-        //send alert that game is over
-        // delete lobby?
-        // delete game
-        //return to lobby (killing game)
+    }
+    
+    func quitGame() {
+        print("running end game functions")
+        removeLobby()
+        removeSelfFromGameTable()
+        showGameEndView()
     }
     
     

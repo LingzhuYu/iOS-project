@@ -49,7 +49,6 @@ class GameViewController: UIViewController, MKMapViewDelegate {
     // SAVES ALL THE DEVICE LOCATIONS
     var pins: [CustomPointAnnotation?] = []
     
-    
     let username = "hello"
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     
@@ -497,6 +496,23 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    // FOR TESTING GAME CLASS
+    override func viewDidAppear(_ animated: Bool) {
+        startGame()
+        
+        // game ended, go to game end view
+        performSegue(withIdentifier: "showGameEndView" , sender: nil)
+    }
+    
+    func startGame(){
+        let player1 = Player("player1")
+        let player2 = Player("player2")
+        
+        let game = Game(players: [player1, player2], gameTime: 2)
+        game.startGame()
+        performSegue(withIdentifier: "showGameEndView" , sender: nil)
+    }
+    // END TESTING GAME CLASS
 
     /*
     // MARK: - Navigation
