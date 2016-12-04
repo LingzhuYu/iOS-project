@@ -19,6 +19,8 @@ public class Game{
                                             target: nil)
     
     let notificationCentre = NotificationCenter.default
+    let deviceId = UIDevice.current.identifierForVendor!.uuidString
+    let seeker = "hunter" //because people can't decide what word to use
     
     //Point to profile and game
     var profileSnapshot : FIRDataSnapshot?
@@ -178,7 +180,7 @@ public class Game{
         removeLobby()
         removeSelfFromGameTable()
         showGameEndView()
-        updateProfiles(seekerWin: checkSeekerWin())
+        updateProfile(seekerWin: checkSeekerWin())
     }
     
     //Checks who won game
@@ -193,11 +195,45 @@ public class Game{
         return true;
     }
     
-    //Updates the players win/totalPlayed Currently checks for "hunter" cause thats what people have been using
-    func updateProfiles(seekerWin: Bool){
+    //Updates the deviceId's profile win/totalPlayed Currently checks for "hunter" cause thats what people have been using
+    func updateProfile(seekerWin: Bool){
         
         for child in lobbySnapshot?.children.allObjects as? [FIRDataSnapshot] ?? [] {
 
+            if(child.key == deviceId) {
+                let role = child.childSnapshot(forPath: "role").value as! String
+                
+                var currentTotalPlayed = profileSnapshot?.childSnapshot(forPath: deviceId).childSnapshot(forPath: "totalPlayed").value as! Int;
+                
+                currentTotalPlayed += 1;
+                
+                var currentWinCount = profileSnapshot?.childSnapshot(forPath: deviceId).childSnapshot(forPath: "winCount").value as! Int;
+                
+                //Player is seeker and Seeker wins
+                if(role == self.seeker && seekerWin) {
+                    currentWinCount += 1;
+                }
+                
+                //Player is hider and Seeker doesn't win
+                if(role == "hider" && !seekerWin) {
+                    currentWinCount += 1;
+                }
+                
+                //Update profile
+                self.db.child("profile").child(deviceId).setValue(
+                    ["totalPlayed": currentTotalPlayed, "winCount": currentWinCount, "recentUserName": child.childSnapshot(forPath: "userName")]
+                )
+            }
+        }
+        
+    }
+    
+    
+    //Unused: Updates all players win/totalPlayed Currently checks for "hunter" cause thats what people have been using
+    func updateAllProfiles(seekerWin: Bool){
+        
+        for child in lobbySnapshot?.children.allObjects as? [FIRDataSnapshot] ?? [] {
+            
             let deviceId = child.key
             let role = child.childSnapshot(forPath: "role").value as! String
             
@@ -223,7 +259,6 @@ public class Game{
             )
         }
         
-
     }
     
     
