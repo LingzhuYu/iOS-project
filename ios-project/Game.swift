@@ -20,10 +20,18 @@ public class Game{
     
     let notificationCentre = NotificationCenter.default
     
+    //Point to profile and game
+    var profileSnapshot : FIRDataSnapshot?
+    var gameSnapshot : FIRDataSnapshot?
+    var lobbySnapshot : FIRDataSnapshot?
+
     var locationsSnapshot: FIRDataSnapshot!
     
     var db: FIRDatabaseReference!
     fileprivate var _refHandle: FIRDatabaseHandle!
+    
+    //Testing purposes
+    var gameId : String = "1";
     
     //start game
     init(players: [Player], gameTime: Int){
@@ -42,6 +50,26 @@ public class Game{
             guard let strongSelf = self else {return}
             strongSelf.locationsSnapshot = snapshot
             })
+        
+        self.db.child("profile").observe(.value, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf2 = self else {return}
+            
+            self?.profileSnapshot = snapshot
+            })
+        
+        self.db.child("game").child(gameId).child("players").observe(.value, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf3 = self else {return}
+            
+            self?.gameSnapshot = snapshot
+            })
+        
+        self.db.child("lobbies").child(gameId).child("players").observe(.value, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf4 = self else {return}
+            
+            self?.lobbySnapshot = snapshot
+            })
+        
+
     }
     
     // parse locations from db, store in array of tuples
@@ -150,7 +178,54 @@ public class Game{
         removeLobby()
         removeSelfFromGameTable()
         showGameEndView()
+        updateProfiles(seekerWin: checkSeekerWin())
     }
+    
+    //Checks who won game
+    func checkSeekerWin() -> Bool{
+        
+        for child in gameSnapshot?.children.allObjects as? [FIRDataSnapshot] ?? [] {
+            if(child.childSnapshot(forPath: "role").value as! String == "hider") {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    //Updates the players win/totalPlayed Currently checks for "hunter" cause thats what people have been using
+    func updateProfiles(seekerWin: Bool){
+        
+        for child in lobbySnapshot?.children.allObjects as? [FIRDataSnapshot] ?? [] {
+
+            let deviceId = child.key
+            let role = child.childSnapshot(forPath: "role").value as! String
+            
+            var currentTotalPlayed = profileSnapshot?.childSnapshot(forPath: deviceId).childSnapshot(forPath: "totalPlayed").value as! Int;
+            
+            currentTotalPlayed += 1;
+            
+            var currentWinCount = profileSnapshot?.childSnapshot(forPath: deviceId).childSnapshot(forPath: "winCount").value as! Int;
+            
+            //Player is seeker and Seeker wins
+            if(role == "hunter" && seekerWin) {
+                currentWinCount += 1;
+            }
+            
+            //Player is hider and Seeker doesn't win
+            if(role == "hider" && !seekerWin) {
+                currentWinCount += 1;
+            }
+            
+            //Update profile
+            self.db.child("profile").child(deviceId).setValue(
+                ["totalPlayed": currentTotalPlayed, "winCount": currentWinCount]
+            )
+        }
+        
+
+    }
+    
     
     
     
