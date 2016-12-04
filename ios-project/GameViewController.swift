@@ -508,7 +508,7 @@ class GameViewController: UIViewController, MKMapViewDelegate {
         let player1 = Player("player1")
         let player2 = Player("player2")
         
-        let game = Game(players: [player1, player2], gameTime: 2)
+        let game = Game(gameTime: 2, isHost: true)
         game.startGame()
         performSegue(withIdentifier: "showGameEndView" , sender: nil)
     }
