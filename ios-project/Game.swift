@@ -21,9 +21,9 @@ public class Game{
     let notificationCentre = NotificationCenter.default
     
     //Point to profile and game
-    var profileSnapshot : FIRDataSnapshot? = nil;
-    var gameSnapshot : FIRDataSnapshot? = nil;
-    var lobbySnapshot : FIRDataSnapshot? = nil;
+    var profileSnapshot : FIRDataSnapshot?
+    var gameSnapshot : FIRDataSnapshot?
+    var lobbySnapshot : FIRDataSnapshot?
 
     var locationsSnapshot: FIRDataSnapshot!
     
@@ -52,22 +52,23 @@ public class Game{
             })
         
         self.db.child("profile").observe(.value, with: { [weak self] (snapshot) -> Void in
-            guard let strongSelf = self else {return}
+            guard let strongSelf2 = self else {return}
             
             self?.profileSnapshot = snapshot
             })
         
-        self.db.child("game").child(gameId).observe(.value, with: { [weak self] (snapshot) -> Void in
-            guard let strongSelf = self else {return}
+        self.db.child("game").child(gameId).child("players").observe(.value, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf3 = self else {return}
             
             self?.gameSnapshot = snapshot
             })
         
-        self.db.child("lobby").child(gameId).observe(.value, with: { [weak self] (snapshot) -> Void in
-            guard let strongSelf = self else {return}
+        self.db.child("lobbies").child(gameId).child("players").observe(.value, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf4 = self else {return}
             
             self?.lobbySnapshot = snapshot
             })
+        
 
     }
     
@@ -177,6 +178,7 @@ public class Game{
         removeLobby()
         removeSelfFromGameTable()
         showGameEndView()
+        updateProfiles(seekerWin: checkSeekerWin())
     }
     
     //Checks who won game
@@ -191,7 +193,7 @@ public class Game{
         return true;
     }
     
-    //Updates the players win/totalPlayed
+    //Updates the players win/totalPlayed Currently checks for "hunter" cause thats what people have been using
     func updateProfiles(seekerWin: Bool){
         
         for child in lobbySnapshot?.children.allObjects as? [FIRDataSnapshot] ?? [] {
@@ -206,7 +208,7 @@ public class Game{
             var currentWinCount = profileSnapshot?.childSnapshot(forPath: deviceId).childSnapshot(forPath: "winCount").value as! Int;
             
             //Player is seeker and Seeker wins
-            if(role == "seeker" && seekerWin) {
+            if(role == "hunter" && seekerWin) {
                 currentWinCount += 1;
             }
             
